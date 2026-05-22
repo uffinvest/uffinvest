@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { FadeUp } from "@/components/FadeUp";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -15,40 +16,40 @@ function LoginPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   return (
-    <div className="min-h-screen grid md:grid-cols-2 bg-secondary">
+    <div className="min-h-screen grid md:grid-cols-2 bg-navy text-cream">
       {/* Left panel — brand */}
-      <aside className="hidden md:flex flex-col justify-between bg-navy text-white p-12 relative overflow-hidden">
-        <Link to="/" className="font-black tracking-tighter text-2xl uppercase relative z-10">
-          UFFinvest
+      <aside className="hidden md:flex flex-col justify-between bg-surface p-12 relative overflow-hidden border-r border-line">
+        <Link to="/" className="font-serif italic font-bold text-2xl text-cream relative z-10">
+          UFF<span className="text-gold">invest</span>
         </Link>
-        <div className="relative z-10">
-          <h2 className="font-serif italic text-5xl text-accent leading-tight mb-6">
+        <FadeUp immediate className="relative z-10">
+          <h2 className="font-serif italic text-5xl text-gold leading-tight mb-6">
             Bem-vindo, <br /> analista.
           </h2>
-          <p className="text-white/60 max-w-sm leading-relaxed">
+          <p className="text-mute max-w-sm leading-relaxed">
             Área restrita aos membros da liga. Acesse comitês, relatórios internos e a base de
             estudos da UFFinvest.
           </p>
-        </div>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-white/30 relative z-10">
+        </FadeUp>
+        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint relative z-10">
           © 2026 — UFFinvest Market League
         </p>
-        <div className="absolute -bottom-32 -right-32 size-96 rounded-full bg-primary/40 blur-3xl" />
-        <div className="absolute top-1/3 -left-20 size-72 rounded-full bg-accent/20 blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 size-96 rounded-full bg-gold/10 blur-3xl" />
+        <div className="absolute top-1/3 -left-20 size-72 rounded-full bg-gold/5 blur-3xl" />
       </aside>
 
       {/* Right panel — form */}
-      <section className="flex flex-col justify-center p-8 md:p-16">
+      <section className="flex flex-col justify-center p-8 md:p-16 bg-navy">
         <div className="md:hidden mb-12">
-          <Link to="/" className="font-black tracking-tighter text-2xl uppercase text-navy">
-            UFFinvest
+          <Link to="/" className="font-serif italic font-bold text-2xl text-cream">
+            UFF<span className="text-gold">invest</span>
           </Link>
         </div>
-        <div className="max-w-md w-full">
-          <span className="font-mono text-xs uppercase tracking-widest text-primary">
+        <FadeUp immediate className="max-w-md w-full">
+          <span className="ds-label">
             {mode === "login" ? "Acesso de Membro" : "Novo Cadastro"}
           </span>
-          <h1 className="text-4xl font-black tracking-tighter mt-3 mb-10 text-navy">
+          <h1 className="font-serif italic text-4xl md:text-5xl text-cream mt-3 mb-10">
             {mode === "login" ? "Entre na sua conta." : "Crie sua conta."}
           </h1>
 
@@ -64,32 +65,26 @@ function LoginPage() {
             <Field label="E-mail institucional" type="email" placeholder="voce@id.uff.br" />
             <Field label="Senha" type="password" placeholder="••••••••" />
 
-            <button
-              type="submit"
-              className="w-full bg-primary text-white py-4 font-bold uppercase tracking-widest text-xs hover:bg-accent hover:text-navy transition-all"
-            >
+            <button type="submit" className="btn-primary w-full mt-2">
               {mode === "login" ? "Entrar" : "Cadastrar"}
             </button>
           </form>
 
-          <p className="mt-8 text-sm text-navy/60">
+          <p className="mt-8 text-sm text-mute">
             {mode === "login" ? "Ainda não é membro?" : "Já tem cadastro?"}{" "}
             <button
               type="button"
               onClick={() => setMode(mode === "login" ? "signup" : "login")}
-              className="text-primary font-bold border-b border-accent hover:text-accent transition-colors"
+              className="text-gold font-semibold hover:text-gold-hover transition-colors"
             >
               {mode === "login" ? "Criar conta" : "Fazer login"}
             </button>
           </p>
 
-          <Link
-            to="/"
-            className="inline-block mt-10 font-mono text-[10px] uppercase tracking-widest text-navy/50 hover:text-navy"
-          >
+          <Link to="/" className="btn-ghost mt-10">
             ← Voltar ao site
           </Link>
-        </div>
+        </FadeUp>
       </section>
     </div>
   );
@@ -98,12 +93,12 @@ function LoginPage() {
 function Field({ label, ...props }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="font-mono text-[10px] uppercase tracking-widest text-navy/60 block mb-2">
+      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-mute block mb-2">
         {label}
       </span>
       <input
         {...props}
-        className="w-full border border-navy/15 bg-white px-4 py-3 text-navy focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
+        className="w-full bg-surface border border-line rounded-md px-4 py-3 text-cream placeholder:text-faint focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all"
       />
     </label>
   );

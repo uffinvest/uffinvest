@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { SiteLayout } from "@/components/SiteLayout";
+import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
+import { SectionLabel } from "@/components/SectionLabel";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -41,52 +44,64 @@ function SobrePage() {
   return (
     <SiteLayout>
       {/* Hero */}
-      <section className="bg-navy text-white pt-40 pb-24 px-6 md:px-8">
-        <div className="max-w-7xl mx-auto">
-          <span className="font-mono text-accent text-xs uppercase tracking-widest">Sobre a Liga</span>
-          <h1 className="font-black text-5xl md:text-7xl tracking-tight mt-4 leading-none">
-            Uma liga construída <br />
-            <span className="font-serif italic text-accent">por estudantes,</span> para o mercado.
-          </h1>
-          <p className="max-w-2xl mt-8 text-white/70 text-lg leading-relaxed">
-            Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense em torno
-            de um propósito comum: dominar o mercado financeiro com rigor técnico e responsabilidade.
-          </p>
+      <section className="bg-navy pt-40 pb-24">
+        <div className="ds-container">
+          <FadeUp immediate>
+            <SectionLabel>Sobre a Liga</SectionLabel>
+            <h1 className="ds-h1 max-w-4xl">
+              Uma liga construída <br />
+              <em className="ds-em">por estudantes,</em> para o mercado.
+            </h1>
+            <p className="ds-body mt-8 max-w-2xl">
+              Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense em torno
+              de um propósito comum: dominar o mercado financeiro com rigor técnico e responsabilidade.
+            </p>
+          </FadeUp>
         </div>
       </section>
 
       {/* Pillars */}
-      <section className="py-24 px-6 md:px-8 bg-white">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-px bg-navy/5">
-          {pillars.map((p, i) => (
-            <div key={p.label} className="bg-white p-10">
-              <span className="font-mono text-xs text-primary block mb-6">
-                0{i + 1} / {p.label.toUpperCase()}
-              </span>
-              <h3 className="font-serif text-3xl italic mb-4 text-navy">{p.label}.</h3>
-              <p className="text-navy/70 leading-relaxed">{p.text}</p>
-            </div>
-          ))}
+      <section className="ds-section bg-surface">
+        <div className="ds-container">
+          <FadeUp>
+            <SectionLabel>Princípios</SectionLabel>
+            <h2 className="ds-h2 mb-12">
+              Missão, visão e <em className="ds-em">valores.</em>
+            </h2>
+          </FadeUp>
+          <FadeUpStagger className="grid md:grid-cols-3 gap-6">
+            {pillars.map((p, i) => (
+              <motion.div key={p.label} variants={fadeUpItem} className="ds-card">
+                <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
+                  0{i + 1} / {p.label}
+                </span>
+                <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.label}.</h3>
+                <p className="text-mute leading-relaxed">{p.text}</p>
+              </motion.div>
+            ))}
+          </FadeUpStagger>
         </div>
       </section>
 
       {/* History */}
-      <section className="py-24 px-6 md:px-8 bg-secondary">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="font-mono text-xs uppercase tracking-widest text-primary">Nossa História</span>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mt-4">
-              Oito anos formando analistas.
+      <section className="ds-section bg-navy">
+        <div className="ds-container">
+          <FadeUp className="mb-16">
+            <SectionLabel>Nossa História</SectionLabel>
+            <h2 className="ds-h2">
+              Oito anos formando <em className="ds-em">analistas.</em>
             </h2>
-          </div>
-          <ol className="relative border-l-2 border-accent/40 ml-2 space-y-12">
-            {timeline.map((t) => (
-              <li key={t.year} className="pl-8 relative">
-                <div className="absolute -left-[9px] top-2 size-4 bg-accent rounded-full ring-4 ring-secondary" />
-                <p className="font-mono text-primary text-sm mb-2">{t.year}</p>
-                <h3 className="font-bold text-2xl mb-2">{t.title}</h3>
-                <p className="text-navy/70 max-w-2xl leading-relaxed">{t.text}</p>
-              </li>
+          </FadeUp>
+          <ol className="relative border-l border-gold-line ml-2 space-y-12">
+            {timeline.map((t, i) => (
+              <FadeUp key={t.year} delay={i * 0.05}>
+                <li className="pl-8 relative">
+                  <div className="absolute -left-[7px] top-2 size-3 bg-gold rounded-full ring-4 ring-navy" />
+                  <p className="font-mono text-gold text-sm mb-2">{t.year}</p>
+                  <h3 className="ds-h3 mb-2">{t.title}</h3>
+                  <p className="text-mute max-w-2xl leading-relaxed">{t.text}</p>
+                </li>
+              </FadeUp>
             ))}
           </ol>
         </div>

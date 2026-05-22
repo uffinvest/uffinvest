@@ -5,91 +5,226 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-navy: var(--navy);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  /* === UFFinvest Design System tokens === */
+  --color-navy: #080F1E;
+  --color-surface: #0D1628;
+  --color-elevated: #112040;
+  --color-line: rgba(255, 255, 255, 0.07);
+  --color-gold-line: rgba(200, 168, 75, 0.25);
+
+  --color-gold: #C8A84B;
+  --color-gold-hover: #DFC06A;
+  --color-gold-subtle: rgba(200, 168, 75, 0.08);
+
+  --color-cream: #EAE6DD;
+  --color-mute: #7A8BA8;
+  --color-faint: #3A4A62;
+
+  --color-success: #22C55E;
+
+  /* === shadcn semantic aliases (mapped to DS) === */
+  --color-background: var(--color-navy);
+  --color-foreground: var(--color-cream);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-cream);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-cream);
+  --color-primary: var(--color-gold);
+  --color-primary-foreground: var(--color-navy);
+  --color-secondary: var(--color-surface);
+  --color-secondary-foreground: var(--color-cream);
+  --color-muted: var(--color-elevated);
+  --color-muted-foreground: var(--color-mute);
+  --color-accent: var(--color-gold);
+  --color-accent-foreground: var(--color-navy);
+  --color-border: var(--color-line);
+  --color-input: var(--color-elevated);
+  --color-ring: var(--color-gold);
+  --color-destructive: #DC2626;
+  --color-destructive-foreground: var(--color-cream);
+
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root {
-  --background: oklch(0.985 0.005 250);
-  --foreground: oklch(0.18 0.05 270);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.05 270);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.05 270);
-  --primary: oklch(0.36 0.21 268);
-  --primary-foreground: oklch(0.985 0.005 250);
-  --secondary: oklch(0.985 0.005 250);
-  --secondary-foreground: oklch(0.18 0.05 270);
-  --muted: oklch(0.96 0.008 250);
-  --muted-foreground: oklch(0.5 0.04 260);
-  --accent: oklch(0.81 0.13 82);
-  --accent-foreground: oklch(0.18 0.05 270);
-  --navy: oklch(0.22 0.13 270);
-  --destructive: oklch(0.58 0.24 27);
-  --destructive-foreground: oklch(0.985 0.005 250);
-  --border: oklch(0.92 0.01 255);
-  --input: oklch(0.92 0.01 255);
-  --ring: oklch(0.36 0.21 268);
-  --radius: 0.25rem;
-}
-
-.dark {
-  --background: oklch(0.18 0.05 270);
-  --foreground: oklch(0.985 0.005 250);
-  --card: oklch(0.22 0.13 270);
-  --card-foreground: oklch(0.985 0.005 250);
-  --popover: oklch(0.22 0.13 270);
-  --popover-foreground: oklch(0.985 0.005 250);
-  --primary: oklch(0.81 0.13 82);
-  --primary-foreground: oklch(0.18 0.05 270);
-  --secondary: oklch(0.25 0.08 270);
-  --secondary-foreground: oklch(0.985 0.005 250);
-  --muted: oklch(0.25 0.08 270);
-  --muted-foreground: oklch(0.7 0.04 260);
-  --accent: oklch(0.81 0.13 82);
-  --accent-foreground: oklch(0.18 0.05 270);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.81 0.13 82);
+  --background: var(--color-navy);
+  --foreground: var(--color-cream);
+  --radius: 0.375rem;
 }
 
 @layer base {
   * {
-    border-color: var(--color-border);
+    border-color: var(--color-line);
   }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  html, body {
+    background-color: var(--color-navy);
+    color: var(--color-cream);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+  body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
   h1, h2, h3, h4 {
     text-wrap: balance;
+    font-family: var(--font-serif);
+  }
+  h3 {
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+}
+
+/* === Design System utility classes === */
+@layer components {
+  .ds-container {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+  .ds-section {
+    padding-block: 120px;
+  }
+
+  /* Display */
+  .ds-h1 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(40px, 7vw, 60px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--color-cream);
+  }
+  .ds-h2 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 42px);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    color: var(--color-cream);
+  }
+  .ds-h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--color-cream);
+  }
+  .ds-body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-mute);
+  }
+  .ds-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-gold);
+  }
+  .ds-em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-gold);
+    font-weight: 700;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--color-gold);
+    color: var(--color-navy);
+    padding: 14px 28px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    background: var(--color-gold-hover);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-gold);
+    border: 1px solid var(--color-gold);
+    padding: 13px 27px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-secondary:hover {
+    background: var(--color-gold-subtle);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-mute);
+    padding: 8px 0;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .btn-ghost:hover {
+    color: var(--color-cream);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transform: translateY(-1px);
+  }
+
+  /* Card */
+  .ds-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.25s ease;
+  }
+  .ds-card:hover {
+    border-color: var(--color-gold-line);
+    box-shadow: 0 0 0 1px rgba(200, 168, 75, 0.15), 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Section label with accent line */
+  .ds-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-gold);
+    margin-bottom: 16px;
+  }
+  .ds-section-label::before {
+    content: "—";
+    color: var(--color-gold);
   }
 }
 

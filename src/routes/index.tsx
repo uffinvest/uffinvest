@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
-import heroImg from "@/assets/hero-financial.jpg";
+import heroImg from "@/assets/touro-capa.png";
 import teamImg from "@/assets/team-collab.jpg";
 import { alumni, team } from "@/data/mock";
 

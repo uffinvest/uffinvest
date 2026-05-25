@@ -30,7 +30,7 @@ export function Navbar() {
       }}
     >
       <Link to="/" className="flex items-center" aria-label="UFFinvest — Início">
-        <img src={logoUFFinvest} alt="UFFinvest" className="h-8 md:h-9 w-auto" />
+        <img src={logoUFFinvest} alt="UFFinvest" className="h-5 md:h-6 w-auto" />
       </Link>
       <div className="hidden md:flex gap-10 text-[11px] font-semibold uppercase tracking-[0.12em] items-center text-mute">
         {links.map((l) => (

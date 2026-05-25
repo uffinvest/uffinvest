@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 
 const links = [
   { to: "/", label: "Início" },
@@ -28,11 +29,8 @@ export function Navbar() {
         borderBottom: scrolled ? "1px solid var(--color-line)" : "1px solid transparent",
       }}
     >
-      <Link
-        to="/"
-        className="font-serif italic font-bold text-2xl tracking-tight text-cream"
-      >
-        UFF<span className="text-gold">invest</span>
+      <Link to="/" className="flex items-center" aria-label="UFFinvest — Início">
+        <img src={logoUFFinvest} alt="UFFinvest" className="h-8 md:h-9 w-auto" />
       </Link>
       <div className="hidden md:flex gap-10 text-[11px] font-semibold uppercase tracking-[0.12em] items-center text-mute">
         {links.map((l) => (

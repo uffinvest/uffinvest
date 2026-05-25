@@ -1,13 +1,12 @@
 import { Link } from "@tanstack/react-router";
+import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-cream pt-24 pb-12 px-6 border-t border-line">
       <div className="ds-container grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div className="md:col-span-2">
-          <div className="font-serif italic text-3xl font-bold mb-6 text-cream">
-            UFF<span className="text-gold">invest</span>
-          </div>
+          <img src={logoUFFinvest} alt="UFFinvest" className="h-10 w-auto mb-6" />
           <p className="text-mute max-w-sm mb-8 leading-relaxed">
             Referência acadêmica em gestão e análise de ativos no Rio de Janeiro.
             Filiada à Universidade Federal Fluminense.

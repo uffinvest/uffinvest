@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { FadeUp } from "@/components/FadeUp";
+import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -19,8 +20,8 @@ function LoginPage() {
     <div className="min-h-screen grid md:grid-cols-2 bg-navy text-cream">
       {/* Left panel — brand */}
       <aside className="hidden md:flex flex-col justify-between bg-surface p-12 relative overflow-hidden border-r border-line">
-        <Link to="/" className="font-serif italic font-bold text-2xl text-cream relative z-10">
-          UFF<span className="text-gold">invest</span>
+        <Link to="/" className="relative z-10 inline-flex items-center" aria-label="UFFinvest — Início">
+          <img src={logoUFFinvest} alt="UFFinvest" className="h-6 w-auto" />
         </Link>
         <FadeUp immediate className="relative z-10">
           <h2 className="font-serif italic text-5xl text-gold leading-tight mb-6">
@@ -41,8 +42,8 @@ function LoginPage() {
       {/* Right panel — form */}
       <section className="flex flex-col justify-center p-8 md:p-16 bg-navy">
         <div className="md:hidden mb-12">
-          <Link to="/" className="font-serif italic font-bold text-2xl text-cream">
-            UFF<span className="text-gold">invest</span>
+          <Link to="/" className="inline-flex items-center" aria-label="UFFinvest — Início">
+            <img src={logoUFFinvest} alt="UFFinvest" className="h-6 w-auto" />
           </Link>
         </div>
         <FadeUp immediate className="max-w-md w-full">

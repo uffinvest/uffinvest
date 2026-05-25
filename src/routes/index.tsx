@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
-import heroImg from "@/assets/touro-capa.png";
+import heroImg from "@/assets/hero-financial.jpg";
 import teamImg from "@/assets/team-collab.jpg";
 import { alumni, team } from "@/data/mock";
 
@@ -37,14 +37,44 @@ function Index() {
   return (
     <SiteLayout>
       {/* HERO */}
-      <section className="relative min-h-screen w-full overflow-hidden bg-navy">
+      <section className="relative min-h-screen w-full flex items-center overflow-hidden bg-navy">
         <img
           src={heroImg}
-          alt="Touro em fundo azul — símbolo do mercado em alta"
+          alt="Distrito financeiro ao entardecer"
           width={1920}
           height={1080}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-35"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/85 to-navy/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-navy/40" />
+        <div className="ds-container relative z-10 py-32">
+          <FadeUp immediate>
+            <div className="ds-section-label">Formando a elite do mercado</div>
+            <h1 className="ds-h1 max-w-4xl">
+              A excelência no <br />
+              <em className="ds-em">coração da UFF.</em>
+            </h1>
+            <p className="ds-body mt-8 max-w-xl text-mute">
+              Liga acadêmica dedicada à formação técnica e ética de futuros profissionais
+              do mercado financeiro brasileiro.
+            </p>
+          </FadeUp>
+          <FadeUp immediate delay={0.2}>
+            <div className="flex flex-wrap gap-4 items-center mt-12">
+              <Link to="/projetos" className="btn-primary">
+                Conheça nossa liga
+                <span>→</span>
+              </Link>
+              <Link to="/sobre" className="btn-secondary">Sobre a liga</Link>
+              <div className="flex flex-col border-l border-line pl-6 ml-2">
+                <span className="text-faint text-[10px] uppercase tracking-[0.12em] mb-1">
+                  Próximo Recrutamento
+                </span>
+                <span className="text-cream font-mono text-sm">Março 2026</span>
+              </div>
+            </div>
+          </FadeUp>
+        </div>
       </section>
 
       {/* ABOUT SNIPPET */}

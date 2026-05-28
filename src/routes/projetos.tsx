@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { FileText, LineChart, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
@@ -20,6 +21,7 @@ const projects = [
   {
     tag: "Relatório Mensal",
     title: "Carta Macro",
+    icon: FileText,
     description:
       "Publicação mensal com a leitura da liga sobre o cenário macroeconômico doméstico e global. Análise de inflação, juros, câmbio, atividade e fluxos.",
     bullets: ["Indicadores BR e globais", "Cenário fiscal e monetário", "Calls de posicionamento"],
@@ -28,6 +30,7 @@ const projects = [
   {
     tag: "Research",
     title: "Análise Macroeconômica",
+    icon: LineChart,
     description:
       "Estudos aprofundados sobre temas estruturais: política fiscal, reformas, commodities e geopolítica. Material usado nos comitês internos.",
     bullets: ["Deep-dives temáticos", "Modelagem de cenários", "Comitê macro semanal"],
@@ -36,6 +39,7 @@ const projects = [
   {
     tag: "Equity Research",
     title: "Análise Fundamentalista",
+    icon: Building2,
     description:
       "Teses de investimento sobre empresas listadas na B3, com modelagem por DCF e múltiplos, análise setorial e recomendação documentada.",
     bullets: ["Valuation por DCF", "Modelagem operacional", "Teses long e short"],
@@ -75,9 +79,7 @@ function ProjetosPage() {
                   <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy">
                     {p.tag}
                   </span>
-                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy/60">
-                    0{i + 1}
-                  </span>
+                  <p.icon className="size-4 text-faint transition-colors duration-300 group-hover:text-navy/60" strokeWidth={1.5} />
                 </div>
 
                 <div className="flex-1 flex items-center justify-center py-10">

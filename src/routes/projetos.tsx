@@ -76,7 +76,7 @@ function ProjetosPage() {
                 className="ds-card group flex flex-col min-h-[400px] md:min-h-[440px] transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer"
               >
                 <div className="flex items-start justify-between">
-                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300">
+                  <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">
                     {p.tag}
                   </span>
                   <p.icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />

@@ -79,9 +79,7 @@ function ProjetosPage() {
                   <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy">
                     {p.tag}
                   </span>
-                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy/60">
-                    0{i + 1}
-                  </span>
+                  <p.icon className="size-4 text-faint transition-colors duration-300 group-hover:text-navy/60" strokeWidth={1.5} />
                 </div>
 
                 <div className="flex-1 flex items-center justify-center py-10">

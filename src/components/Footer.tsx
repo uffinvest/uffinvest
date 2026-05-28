@@ -35,8 +35,8 @@ export function Footer() {
         </div>
         <div>
           <h5 className="ds-label mb-6">Contato</h5>
-          <p className="text-sm text-mute mb-4">Niterói, RJ — Campus Gragoatá</p>
-          <p className="text-sm font-mono text-cream">contato@uffinvest.com</p>
+          <p className="text-sm text-mute mb-4">Campos dos Goytacazes - RJ</p>
+          <p className="text-sm font-mono text-cream">uffinvest@gmail.com</p>
         </div>
       </div>
       <div className="ds-container pt-8 border-t border-line flex flex-col md:flex-row gap-3 md:gap-0 justify-between items-center text-[10px] text-faint uppercase tracking-[0.12em] font-mono">

@@ -61,48 +61,62 @@ function ProjetosPage() {
         </div>
       </section>
 
-      <section className="ds-section bg-navy">
-        <FadeUpStagger className="ds-container flex flex-col gap-6">
-          {projects.map((p, i) => (
-            <motion.article
-              key={p.title}
-              variants={fadeUpItem}
-              className="ds-card grid md:grid-cols-12 gap-8"
-            >
-              <div className="md:col-span-2">
-                <span className="font-mono text-[11px] text-gold uppercase tracking-[0.12em]">
-                  0{i + 1} / {p.tag}
-                </span>
-              </div>
-              <div className="md:col-span-6">
-                <h2 className="font-serif text-3xl md:text-4xl text-cream mb-4">
-                  {p.title}.
-                </h2>
-                <p className="text-mute leading-relaxed max-w-xl">{p.description}</p>
-              </div>
-              <div className="md:col-span-4 flex flex-col gap-4">
-                <ul className="space-y-3">
-                  {p.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-3 text-sm">
-                      <span className="size-1.5 bg-gold rounded-full mt-2 shrink-0" />
-                      <span className="text-cream/85">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 pt-6 border-t border-line flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.12em]">
-                    {p.edition}
+      <section className="ds-section bg-navy pt-0">
+        <FadeUpStagger className="ds-container grid gap-6 md:grid-cols-3">
+          {projects.map((p, i) => {
+            const isAccent = i === 1;
+            return (
+              <motion.article
+                key={p.title}
+                variants={fadeUpItem}
+                className="ds-card flex flex-col min-h-[460px] md:min-h-[520px]"
+              >
+                <div className="flex items-start justify-between">
+                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em]">
+                    {p.tag}
                   </span>
-                  <a
-                    href="#"
-                    className="text-gold font-semibold text-xs uppercase tracking-[0.12em] hover:text-gold-hover transition-colors"
-                  >
-                    ↓ Download PDF
-                  </a>
+                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em]">
+                    0{i + 1}
+                  </span>
                 </div>
-              </div>
-            </motion.article>
-          ))}
+
+                <div className="flex-1 flex items-center justify-center py-10">
+                  <h2
+                    className={
+                      isAccent
+                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight"
+                        : "font-serif text-cream text-3xl md:text-4xl text-center leading-tight"
+                    }
+                  >
+                    {p.title}.
+                  </h2>
+                </div>
+
+                <div className="space-y-5">
+                  <ul className="space-y-2.5">
+                    {p.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-3 text-sm">
+                        <span className="size-1.5 bg-gold rounded-full mt-2 shrink-0" />
+                        <span className="text-cream/80">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="pt-5 border-t border-line flex items-center justify-between">
+                    <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em]">
+                      {p.edition}
+                    </span>
+                    <a
+                      href="#"
+                      className="text-gold font-semibold text-[11px] uppercase tracking-[0.16em] hover:text-gold-hover transition-colors"
+                    >
+                      ↓ Download PDF
+                    </a>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
         </FadeUpStagger>
       </section>
 

@@ -27,10 +27,10 @@ export const Route = createFileRoute("/")({
 });
 
 const pillars = [
-  { n: "01", t: "Rigor", h: "Análise Crítica", d: "Metodologia própria baseada nos fundamentos de grandes gestoras." },
-  { n: "02", t: "Rede", h: "Networking Ativo", d: "Conexão direta com ex-membros nas maiores casas de análise do país." },
-  { n: "03", t: "Prática", h: "Comitês Reais", d: "Discussões semanais de teses com gestão de portfólio simulado." },
-  { n: "04", t: "Ensino", h: "Trilha Estruturada", d: "Currículo próprio cobrindo macro, valuation e M&A." },
+  { n: "01", t: "Rigor", h: "Análise Crítica", d: "Aprendemos e aplicamos os frameworks usados pelo mercado: valuation, análise macro e leitura de balanços." },
+  { n: "02", t: "Rede", h: "Networking", d: "Contato com membros e visibilidade para aqueles que trabalham no mercado financeiro." },
+  { n: "03", t: "Prática", h: "Comitês de Teses", d: "Encontros semanais para debater teses de investimento e acompanhar carteiras simuladas." },
+  { n: "04", t: "Ensino", h: "Trilha de Estudos", d: "Uma trilha que cobre do básico ao avançado: macro, valuation, renda fixa e crédito." },
 ];
 
 function Index() {
@@ -58,9 +58,10 @@ function Index() {
               Nossa missão no <em className="ds-em">mercado financeiro.</em>
             </h2>
             <p className="ds-body">
-              A UFFinvest não é apenas uma liga acadêmica. Somos um centro de excelência
-              focado na formação prática de profissionais para os maiores players do
-              mercado financeiro global.
+              A UFFinvest nasceu de uma percepção simples: a grade curricular da UFF não
+              prepara para o mercado financeiro. Então criamos nosso próprio espaço — para
+              estudar de verdade, produzir análises e conectar quem quer construir uma
+              carreira no setor.
             </p>
             <Link to="/sobre" className="btn-ghost mt-8">
               Conheça nossa história <span>→</span>

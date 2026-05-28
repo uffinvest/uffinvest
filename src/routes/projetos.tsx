@@ -69,13 +69,13 @@ function ProjetosPage() {
               <motion.article
                 key={p.title}
                 variants={fadeUpItem}
-                className="ds-card flex flex-col min-h-[460px] md:min-h-[520px]"
+                className="ds-card group flex flex-col min-h-[400px] md:min-h-[440px] transition-colors duration-300 hover:bg-cream hover:border-cream cursor-pointer"
               >
                 <div className="flex items-start justify-between">
-                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em]">
+                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy">
                     {p.tag}
                   </span>
-                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em]">
+                  <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy/60">
                     0{i + 1}
                   </span>
                 </div>
@@ -84,36 +84,22 @@ function ProjetosPage() {
                   <h2
                     className={
                       isAccent
-                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight"
-                        : "font-serif text-cream text-3xl md:text-4xl text-center leading-tight"
+                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-navy"
+                        : "font-serif text-cream text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-navy"
                     }
                   >
                     {p.title}.
                   </h2>
                 </div>
 
-                <div className="space-y-5">
-                  <ul className="space-y-2.5">
-                    {p.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-3 text-sm">
-                        <span className="size-1.5 bg-gold rounded-full mt-2 shrink-0" />
-                        <span className="text-cream/80">{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="pt-5 border-t border-line flex items-center justify-between">
-                    <span className="font-mono text-[10px] text-faint uppercase tracking-[0.16em]">
-                      {p.edition}
-                    </span>
-                    <a
-                      href="#"
-                      className="text-gold font-semibold text-[11px] uppercase tracking-[0.16em] hover:text-gold-hover transition-colors"
-                    >
-                      ↓ Download PDF
-                    </a>
-                  </div>
-                </div>
+                <ul className="space-y-2.5">
+                  {p.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-3 text-sm">
+                      <span className="size-1.5 bg-gold rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-navy" />
+                      <span className="text-cream/80 transition-colors duration-300 group-hover:text-navy/80">{b}</span>
+                    </li>
+                  ))}
+                </ul>
               </motion.article>
             );
           })}

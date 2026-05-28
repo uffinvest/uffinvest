@@ -39,7 +39,7 @@ export function Footer() {
           <p className="text-sm font-mono text-cream">uffinvest@gmail.com</p>
         </div>
       </div>
-      <div className="ds-container pt-8 border-t border-line flex flex-col md:flex-row gap-3 md:gap-0 justify-between items-center text-[10px] text-faint uppercase tracking-[0.12em] font-mono">
+      <div className="ds-container pt-8 border-t border-line flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between items-center text-[10px] text-faint uppercase tracking-[0.12em] font-mono">
         <span>© 2026 UFFinvest Market League</span>
         <span>Universidade Federal Fluminense</span>
       </div>

@@ -98,7 +98,7 @@ function ProcessoPage() {
               Quatro etapas até a <em className="ds-em">liga.</em>
             </h2>
           </FadeUp>
-          <FadeUpStagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <FadeUpStagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {stages.map((s) => (
               <motion.div key={s.n} variants={fadeUpItem} className="ds-card flex flex-col gap-4 min-h-[240px]">
                 <span className="font-serif italic text-5xl text-gold">{s.n}</span>

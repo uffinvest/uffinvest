@@ -66,14 +66,14 @@ function ProjetosPage() {
       </section>
 
       <section className="ds-section bg-navy pt-0">
-        <FadeUpStagger className="ds-container grid gap-6 md:grid-cols-3">
+        <FadeUpStagger className="ds-container grid gap-6 lg:grid-cols-3">
           {projects.map((p, i) => {
             const isAccent = i === 1;
             return (
               <motion.article
                 key={p.title}
                 variants={fadeUpItem}
-                className="ds-card group flex flex-col min-h-[400px] md:min-h-[440px] transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer"
+                className="ds-card group flex flex-col min-h-[360px] lg:min-h-[440px] transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer"
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">

@@ -51,8 +51,8 @@ function Index() {
 
       {/* ABOUT SNIPPET */}
       <section className="ds-section bg-navy">
-        <div className="ds-container grid grid-cols-1 md:grid-cols-12 gap-12">
-          <FadeUp className="md:col-span-5">
+        <div className="ds-container grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <FadeUp className="lg:col-span-5">
             <SectionLabel>Sobre Nós</SectionLabel>
             <h2 className="ds-h2 mb-6">
               Nossa missão no <em className="ds-em">mercado financeiro.</em>
@@ -66,7 +66,7 @@ function Index() {
               Conheça nossa história <span>→</span>
             </Link>
           </FadeUp>
-          <FadeUpStagger className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <FadeUpStagger className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {pillars.map((c) => (
               <motion.div key={c.n} variants={fadeUpItem} className="ds-card">
                 <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
@@ -113,19 +113,19 @@ function Index() {
       {/* TEAM */}
       <section className="ds-section bg-navy">
         <div className="ds-container">
-          <FadeUp className="grid md:grid-cols-12 gap-8 mb-16">
-            <div className="md:col-span-5">
+          <FadeUp className="grid lg:grid-cols-12 gap-8 mb-16">
+            <div className="lg:col-span-5">
               <SectionLabel>Diretoria 2026</SectionLabel>
               <h2 className="ds-h2">
                 Nossa <em className="ds-em">equipe.</em>
               </h2>
             </div>
-            <p className="md:col-span-6 md:col-start-7 ds-body self-end">
+            <p className="lg:col-span-6 lg:col-start-7 ds-body self-end">
               Estudantes da UFF eleitos pelos próprios membros a cada ciclo. Conduzem
               comitês, mentoram analistas júnior e representam a liga junto ao mercado.
             </p>
           </FadeUp>
-          <FadeUpStagger className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <FadeUpStagger className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => (
               <motion.div
                 key={m.name}

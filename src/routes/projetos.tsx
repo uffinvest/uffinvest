@@ -73,21 +73,21 @@ function ProjetosPage() {
               <motion.article
                 key={p.title}
                 variants={fadeUpItem}
-                className="ds-card group flex flex-col min-h-[400px] md:min-h-[440px] transition-colors duration-300 hover:bg-cream hover:border-cream cursor-pointer"
+                className="ds-card group flex flex-col min-h-[400px] md:min-h-[440px] transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer"
               >
                 <div className="flex items-start justify-between">
-                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300 group-hover:text-navy">
+                  <span className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] transition-colors duration-300">
                     {p.tag}
                   </span>
-                  <p.icon className="size-4 text-faint transition-colors duration-300 group-hover:text-navy/60" strokeWidth={1.5} />
+                  <p.icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
                 </div>
 
                 <div className="flex-1 flex items-center justify-center py-10">
                   <h2
                     className={
                       isAccent
-                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-navy"
-                        : "font-serif text-cream text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-navy"
+                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight transition-colors duration-300"
+                        : "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
                     }
                   >
                     {p.title}.
@@ -97,8 +97,8 @@ function ProjetosPage() {
                 <ul className="space-y-2.5">
                   {p.bullets.map((b) => (
                     <li key={b} className="flex items-start gap-3 text-sm">
-                      <span className="size-1.5 bg-gold rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-navy" />
-                      <span className="text-cream/80 transition-colors duration-300 group-hover:text-navy/80">{b}</span>
+                      <span className="size-1.5 bg-navy rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-gold" />
+                      <span className="text-navy/80 transition-colors duration-300 group-hover:text-cream/80">{b}</span>
                     </li>
                   ))}
                 </ul>

@@ -85,9 +85,8 @@ function ProjetosPage() {
                 <div className="flex-1 flex items-center justify-center py-10">
                   <h2
                     className={
-                      isAccent
-                        ? "font-serif italic text-gold text-3xl md:text-4xl text-center leading-tight transition-colors duration-300"
-                        : "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
+                      (isAccent ? "italic " : "") +
+                      "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
                     }
                   >
                     {p.title}.

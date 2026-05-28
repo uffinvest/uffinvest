@@ -8,8 +8,7 @@ export function Footer() {
         <div className="sm:col-span-2">
           <img src={logoUFFinvest} alt="UFFinvest" className="h-7 w-auto mb-6" />
           <p className="text-mute max-w-sm mb-8 leading-relaxed">
-            Referência acadêmica em gestão e análise de ativos no Rio de Janeiro.
-            Filiada à Universidade Federal Fluminense.
+            Liga de mercado financeiro da Universidade Federal Fluminense de Campos dos Goytacazes.
           </p>
           <div className="flex gap-3">
             {["in", "ig", "yt"].map((s) => (

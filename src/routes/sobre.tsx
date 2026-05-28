@@ -69,7 +69,7 @@ function SobrePage() {
               Missão, visão e <em className="ds-em">valores.</em>
             </h2>
           </FadeUp>
-          <FadeUpStagger className="grid md:grid-cols-3 gap-6">
+          <FadeUpStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pillars.map((p, i) => (
               <motion.div key={p.label} variants={fadeUpItem} className="ds-card">
                 <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">

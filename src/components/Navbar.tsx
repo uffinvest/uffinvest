@@ -44,7 +44,7 @@ export function Navbar() {
         <img src={logoUFFinvest} alt="UFFinvest" className="h-5 md:h-6 w-auto" />
       </Link>
 
-      <div className="hidden md:flex gap-10 text-[11px] font-semibold uppercase tracking-[0.12em] items-center text-mute">
+      <div className="hidden lg:flex gap-10 text-[11px] font-semibold uppercase tracking-[0.12em] items-center text-mute">
         {links.map((l) => (
           <Link
             key={l.to}
@@ -61,7 +61,7 @@ export function Navbar() {
         </Link>
       </div>
 
-      <div className="md:hidden flex items-center gap-3">
+      <div className="lg:hidden flex items-center gap-3">
         <Link
           to="/login"
           onClick={() => setOpen(false)}
@@ -81,7 +81,7 @@ export function Navbar() {
       </div>
 
       <div
-        className={`md:hidden fixed inset-x-0 top-[64px] bottom-0 transition-all duration-300 ${
+        className={`lg:hidden fixed inset-x-0 top-[64px] bottom-0 transition-all duration-300 ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         style={{

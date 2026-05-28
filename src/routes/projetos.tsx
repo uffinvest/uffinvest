@@ -21,6 +21,7 @@ const projects = [
   {
     tag: "Relatório Mensal",
     title: "Carta Macro",
+    icon: FileText,
     description:
       "Publicação mensal com a leitura da liga sobre o cenário macroeconômico doméstico e global. Análise de inflação, juros, câmbio, atividade e fluxos.",
     bullets: ["Indicadores BR e globais", "Cenário fiscal e monetário", "Calls de posicionamento"],
@@ -29,6 +30,7 @@ const projects = [
   {
     tag: "Research",
     title: "Análise Macroeconômica",
+    icon: LineChart,
     description:
       "Estudos aprofundados sobre temas estruturais: política fiscal, reformas, commodities e geopolítica. Material usado nos comitês internos.",
     bullets: ["Deep-dives temáticos", "Modelagem de cenários", "Comitê macro semanal"],
@@ -37,6 +39,7 @@ const projects = [
   {
     tag: "Equity Research",
     title: "Análise Fundamentalista",
+    icon: Building2,
     description:
       "Teses de investimento sobre empresas listadas na B3, com modelagem por DCF e múltiplos, análise setorial e recomendação documentada.",
     bullets: ["Valuation por DCF", "Modelagem operacional", "Teses long e short"],

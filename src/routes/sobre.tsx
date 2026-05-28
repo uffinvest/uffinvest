@@ -19,15 +19,18 @@ export const Route = createFileRoute("/sobre")({
 const pillars = [
   {
     label: "Missão",
-    text: "Formar estudantes da UFF com excelência técnica e ética para os desafios do mercado financeiro, conectando teoria acadêmica e prática institucional.",
+    title: "Nossa missão",
+    text: "Criar um espaço onde estudantes da UFF desenvolvem capacidade técnica real para entrar no mercado financeiro bem preparados.",
   },
   {
     label: "Visão",
-    text: "Ser reconhecida como a principal liga de mercado financeiro do estado do Rio de Janeiro e referência nacional em produção intelectual estudantil.",
+    title: "Nossa visão",
+    text: "Ser reconhecida como uma liga séria, com membros que chegam ao mercado prontos, que olham para trás e valorizam o que aprenderam aqui.",
   },
   {
     label: "Valores",
-    text: "Rigor analítico, integridade intelectual, meritocracia, colaboração e compromisso com a formação contínua dos membros e da comunidade.",
+    title: "Nossos valores",
+    text: "Rigor nas análises, honestidade intelectual, colaboração entre membros e melhoria a cada semestre.",
   },
 ];
 
@@ -53,8 +56,9 @@ function SobrePage() {
               <em className="ds-em">por estudantes,</em> para o mercado.
             </h1>
             <p className="ds-body mt-8 max-w-2xl">
-              Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense em torno
-              de um propósito comum: dominar o mercado financeiro com rigor técnico e responsabilidade.
+              Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense que
+              querem entender o mercado financeiro de verdade, não só na teoria, mas
+              desenvolvendo análises, debatendo teses e se preparando para o setor.
             </p>
           </FadeUp>
         </div>
@@ -75,7 +79,7 @@ function SobrePage() {
                 <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}
                 </span>
-                <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.label}.</h3>
+                <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.title}.</h3>
                 <p className="text-mute leading-relaxed">{p.text}</p>
               </motion.div>
             ))}

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
+import { BookText, Earth, ChartNoAxesCombined, GraduationCap } from "lucide-react";
 import heroImg from "@/assets/touro-capa.png";
 import teamImg from "@/assets/team-collab.jpg";
 import { alumni, team } from "@/data/mock";
@@ -27,10 +28,10 @@ export const Route = createFileRoute("/")({
 });
 
 const pillars = [
-  { n: "01", t: "Rigor", h: "Análise Crítica", d: "Aprendemos e aplicamos os frameworks usados pelo mercado: valuation, análise macro e leitura de balanços." },
-  { n: "02", t: "Rede", h: "Networking", d: "Contato com membros e visibilidade para aqueles que trabalham no mercado financeiro." },
-  { n: "03", t: "Prática", h: "Comitês de Teses", d: "Encontros semanais para debater teses de investimento e acompanhar carteiras simuladas." },
-  { n: "04", t: "Ensino", h: "Trilha de Estudos", d: "Uma trilha que cobre do básico ao avançado: macro, valuation, renda fixa e crédito." },
+  { n: "01", t: "Rigor", h: "Análise Crítica", d: "Aprendemos e aplicamos os frameworks usados pelo mercado: valuation, análise macro e leitura de balanços.", i: BookText },
+  { n: "02", t: "Rede", h: "Networking", d: "Contato com membros e visibilidade para aqueles que trabalham no mercado financeiro.", i: Earth },
+  { n: "03", t: "Prática", h: "Comitês de Teses", d: "Encontros semanais para debater teses de investimento e acompanhar carteiras simuladas.", i: ChartNoAxesCombined },
+  { n: "04", t: "Ensino", h: "Trilha de Estudos", d: "Uma trilha que cobre do básico ao avançado: macro, valuation, renda fixa e crédito.", i: GraduationCap },
 ];
 
 function Index() {

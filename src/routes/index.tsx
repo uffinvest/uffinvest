@@ -71,9 +71,12 @@ function Index() {
           <FadeUpStagger className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {pillars.map((c) => (
               <motion.div key={c.n} variants={fadeUpItem} className="ds-card">
-                <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
-                  {c.n} / {c.t}
-                </span>
+                <div className="flex justify-between items-start mb-4">
+                  <span className="font-mono text-gold block text-[11px] uppercase tracking-[0.12em]">
+                    {c.n} / {c.t}
+                  </span>
+                  <c.i className="size-5 text-gold/60" strokeWidth={1.5} />
+                </div>
                 <h3 className="ds-h3 mb-3">{c.h}</h3>
                 <p className="text-sm text-mute leading-relaxed">{c.d}</p>
               </motion.div>

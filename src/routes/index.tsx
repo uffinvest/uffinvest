@@ -144,12 +144,16 @@ function Index() {
           </FadeUp>
           <FadeUpStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {principles.map((p, i) => (
-              <motion.div key={p.label} variants={fadeUpItem} className="ds-card bg-navy border-line">
-                <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
+              <motion.div
+                key={p.label}
+                variants={fadeUpItem}
+                className="ds-card bg-[#D8D1BE] border-[#C9C0A8] shadow-none hover:shadow-none hover:border-[#C9C0A8]"
+              >
+                <span className="font-mono text-navy/70 block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}
                 </span>
-                <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.title}.</h3>
-                <p className="text-cream/80 leading-relaxed">{p.text}</p>
+                <h3 className="font-serif italic text-3xl mb-4 text-navy">{p.title}.</h3>
+                <p className="text-navy/80 leading-relaxed">{p.text}</p>
               </motion.div>
             ))}
           </FadeUpStagger>

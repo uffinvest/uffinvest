@@ -244,20 +244,21 @@ function Index() {
       </section>
 
       {/* EQUIPE */}
-      <section id="equipe" className="ds-section bg-surface scroll-mt-24">
+      <section id="equipe" className="ds-section bg-cream scroll-mt-24">
         <div className="ds-container">
           <FadeUp className="grid lg:grid-cols-12 gap-8 mb-16">
             <div className="lg:col-span-5">
               <SectionLabel>Diretoria 2026</SectionLabel>
-              <h2 className="ds-h2">
+              <h2 className="ds-h2 text-navy">
                 Nossa <em className="ds-em">equipe.</em>
               </h2>
             </div>
-            <p className="lg:col-span-6 lg:col-start-7 ds-body self-end">
+            <p className="lg:col-span-6 lg:col-start-7 ds-body text-navy/75 self-end">
               Estudantes da UFF eleitos pelos próprios membros a cada ciclo. Conduzem
               comitês, mentoram analistas júnior e representam a liga junto ao mercado.
             </p>
           </FadeUp>
+
           <FadeUpStagger className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => (
               <motion.div

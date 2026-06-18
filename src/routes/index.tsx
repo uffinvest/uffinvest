@@ -183,38 +183,43 @@ function Index() {
           {projects.map((p, i) => {
             const isAccent = i === 1;
             return (
-              <motion.article
+              <motion.div
                 key={p.title}
                 variants={fadeUpItem}
-                className="ds-card group flex flex-col min-h-[360px] lg:min-h-[440px] transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer"
               >
-                <div className="flex items-start justify-between">
-                  <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">
-                    {p.tag}
-                  </span>
-                  <p.icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
-                </div>
+                <Link
+                  to="/projetos/$slug"
+                  params={{ slug: p.slug }}
+                  className="ds-card group flex flex-col min-h-[360px] lg:min-h-[440px] h-full transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer no-underline"
+                >
+                  <div className="flex items-start justify-between">
+                    <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">
+                      {p.tag}
+                    </span>
+                    <p.icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
+                  </div>
 
-                <div className="flex-1 flex items-center justify-center py-10">
-                  <h2
-                    className={
-                      (isAccent ? "italic " : "") +
-                      "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
-                    }
-                  >
-                    {p.title}.
-                  </h2>
-                </div>
+                  <div className="flex-1 flex items-center justify-center py-10">
+                    <h2
+                      className={
+                        (isAccent ? "italic " : "") +
+                        "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
+                      }
+                    >
+                      {p.title}.
+                    </h2>
+                  </div>
 
-                <ul className="space-y-2.5">
-                  {p.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-3 text-sm">
-                      <span className="size-1.5 bg-navy rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-gold" />
-                      <span className="text-navy/80 transition-colors duration-300 group-hover:text-cream/80">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.article>
+                  <ul className="space-y-2.5">
+                    {p.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-3 text-sm">
+                        <span className="size-1.5 bg-navy rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-gold" />
+                        <span className="text-navy/80 transition-colors duration-300 group-hover:text-cream/80">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Link>
+              </motion.div>
             );
           })}
         </FadeUpStagger>

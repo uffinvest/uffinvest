@@ -63,6 +63,7 @@ const timeline = [
 
 const projects = [
   {
+    slug: "carta-macro",
     tag: "Relatório Mensal",
     title: "Carta Macro",
     icon: FileText,
@@ -71,6 +72,7 @@ const projects = [
     bullets: ["Indicadores BR e globais", "Cenário fiscal e monetário", "Calls de posicionamento"],
   },
   {
+    slug: "analise-macroeconomica",
     tag: "Research",
     title: "Análise Macroeconômica",
     icon: LineChart,
@@ -79,6 +81,7 @@ const projects = [
     bullets: ["Deep-dives temáticos", "Modelagem de cenários", "Comitê macro semanal"],
   },
   {
+    slug: "analise-fundamentalista",
     tag: "Equity Research",
     title: "Análise Fundamentalista",
     icon: Building2,

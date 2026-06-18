@@ -28,7 +28,6 @@ export function Footer() {
           <ul className="flex flex-col gap-4 text-sm text-mute">
             <li><Link to="/sobre" className="hover:text-cream transition-colors">Sobre a Liga</Link></li>
             <li><Link to="/projetos" className="hover:text-cream transition-colors">Projetos</Link></li>
-            <li><Link to="/processo-seletivo" className="hover:text-cream transition-colors">Processo Seletivo</Link></li>
             <li><Link to="/login" className="hover:text-cream transition-colors">Área do Membro</Link></li>
           </ul>
         </div>

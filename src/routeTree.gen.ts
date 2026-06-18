@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as ProjetosRouteImport } from './routes/projetos'
-import { Route as ProcessoSeletivoRouteImport } from './routes/processo-seletivo'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -23,11 +22,6 @@ const SobreRoute = SobreRouteImport.update({
 const ProjetosRoute = ProjetosRouteImport.update({
   id: '/projetos',
   path: '/projetos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProcessoSeletivoRoute = ProcessoSeletivoRouteImport.update({
-  id: '/processo-seletivo',
-  path: '/processo-seletivo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -44,14 +38,12 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/processo-seletivo': typeof ProcessoSeletivoRoute
   '/projetos': typeof ProjetosRoute
   '/sobre': typeof SobreRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/processo-seletivo': typeof ProcessoSeletivoRoute
   '/projetos': typeof ProjetosRoute
   '/sobre': typeof SobreRoute
 }
@@ -59,28 +51,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/processo-seletivo': typeof ProcessoSeletivoRoute
   '/projetos': typeof ProjetosRoute
   '/sobre': typeof SobreRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/processo-seletivo' | '/projetos' | '/sobre'
+  fullPaths: '/' | '/login' | '/projetos' | '/sobre'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/processo-seletivo' | '/projetos' | '/sobre'
-  id:
-    | '__root__'
-    | '/'
-    | '/login'
-    | '/processo-seletivo'
-    | '/projetos'
-    | '/sobre'
+  to: '/' | '/login' | '/projetos' | '/sobre'
+  id: '__root__' | '/' | '/login' | '/projetos' | '/sobre'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
-  ProcessoSeletivoRoute: typeof ProcessoSeletivoRoute
   ProjetosRoute: typeof ProjetosRoute
   SobreRoute: typeof SobreRoute
 }
@@ -99,13 +83,6 @@ declare module '@tanstack/react-router' {
       path: '/projetos'
       fullPath: '/projetos'
       preLoaderRoute: typeof ProjetosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/processo-seletivo': {
-      id: '/processo-seletivo'
-      path: '/processo-seletivo'
-      fullPath: '/processo-seletivo'
-      preLoaderRoute: typeof ProcessoSeletivoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -128,7 +105,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
-  ProcessoSeletivoRoute: ProcessoSeletivoRoute,
   ProjetosRoute: ProjetosRoute,
   SobreRoute: SobreRoute,
 }

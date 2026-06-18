@@ -134,51 +134,29 @@ function Index() {
       </section>
 
       {/* Princípios */}
-      <section className="ds-section bg-surface">
+      <section className="ds-section bg-cream">
         <div className="ds-container">
           <FadeUp>
             <SectionLabel>Princípios</SectionLabel>
-            <h2 className="ds-h2 mb-12">
+            <h2 className="ds-h2 mb-12 text-navy">
               Missão, visão e <em className="ds-em">valores.</em>
             </h2>
           </FadeUp>
           <FadeUpStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {principles.map((p, i) => (
-              <motion.div key={p.label} variants={fadeUpItem} className="ds-card">
+              <motion.div key={p.label} variants={fadeUpItem} className="ds-card bg-navy border-line">
                 <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}
                 </span>
                 <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.title}.</h3>
-                <p className="text-mute leading-relaxed">{p.text}</p>
+                <p className="text-cream/80 leading-relaxed">{p.text}</p>
               </motion.div>
             ))}
           </FadeUpStagger>
         </div>
       </section>
 
-      {/* Histórico */}
-      <section className="ds-section bg-navy">
-        <div className="ds-container">
-          <FadeUp className="mb-16">
-            <SectionLabel>Nossa História</SectionLabel>
-            <h2 className="ds-h2">
-              Oito anos formando <em className="ds-em">analistas.</em>
-            </h2>
-          </FadeUp>
-          <ol className="relative border-l border-gold-line ml-2 space-y-12">
-            {timeline.map((t, i) => (
-              <FadeUp key={t.year} delay={i * 0.05}>
-                <li className="pl-8 relative">
-                  <div className="absolute -left-[7px] top-2 size-3 bg-gold rounded-full ring-4 ring-navy" />
-                  <p className="font-mono text-gold text-sm mb-2">{t.year}</p>
-                  <h3 className="ds-h3 mb-2">{t.title}</h3>
-                  <p className="text-mute max-w-2xl leading-relaxed">{t.text}</p>
-                </li>
-              </FadeUp>
-            ))}
-          </ol>
-        </div>
-      </section>
+
 
       {/* PROJETOS */}
       <section id="projetos" className="ds-section bg-surface scroll-mt-24">

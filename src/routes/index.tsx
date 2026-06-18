@@ -112,18 +112,13 @@ function Index() {
             <h2 className="ds-h2 mb-6">
               Nossa missão no <em className="ds-em">mercado financeiro.</em>
             </h2>
-            <p className="ds-body mb-6">
-              A UFFinvest nasceu de uma percepção simples: a grade curricular da UFF não
-              prepara para o mercado financeiro. Então criamos nosso próprio espaço — para
-              estudar de verdade, produzir análises e conectar quem quer construir uma
-              carreira no setor.
-            </p>
             <p className="ds-body">
               Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense que
               querem entender o mercado financeiro de verdade, não só na teoria, mas
               desenvolvendo análises, debatendo teses e se preparando para o setor.
             </p>
           </FadeUp>
+
           <FadeUpStagger className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {pillars.map((c) => (
               <motion.div key={c.n} variants={fadeUpItem} className="ds-card">

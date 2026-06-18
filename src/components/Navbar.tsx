@@ -4,9 +4,11 @@ import { Menu, X } from "lucide-react";
 import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 
 const links = [
-  { to: "/", label: "Início" },
-  { to: "/sobre", label: "Sobre" },
-  { to: "/projetos", label: "Projetos" },
+  { hash: "capa", label: "Início" },
+  { hash: "sobre", label: "Sobre" },
+  { hash: "projetos", label: "Projetos" },
+  { hash: "alumni", label: "Egressos" },
+  { hash: "equipe", label: "Equipe" },
 ] as const;
 
 export function Navbar() {
@@ -39,18 +41,17 @@ export function Navbar() {
         borderBottom: opaque ? "1px solid var(--color-line)" : "1px solid transparent",
       }}
     >
-      <Link to="/" className="flex items-center" aria-label="UFFinvest — Início" onClick={() => setOpen(false)}>
+      <Link to="/" hash="capa" className="flex items-center" aria-label="UFFinvest — Início" onClick={() => setOpen(false)}>
         <img src={logoUFFinvest} alt="UFFinvest" className="h-5 md:h-6 w-auto" />
       </Link>
 
       <div className="hidden lg:flex gap-10 text-[11px] font-semibold uppercase tracking-[0.12em] items-center text-mute">
         {links.map((l) => (
           <Link
-            key={l.to}
-            to={l.to}
+            key={l.hash}
+            to="/"
+            hash={l.hash}
             className="transition-colors hover:text-gold"
-            activeProps={{ style: { color: "var(--color-gold)" } }}
-            activeOptions={{ exact: l.to === "/" }}
           >
             {l.label}
           </Link>
@@ -92,8 +93,9 @@ export function Navbar() {
         <div className="flex flex-col gap-3 px-6 pt-8 pb-10 text-mute items-end">
           {links.map((l) => (
             <Link
-              key={l.to}
-              to={l.to}
+              key={l.hash}
+              to="/"
+              hash={l.hash}
               onClick={() => setOpen(false)}
               className="w-full py-4 px-5 text-sm font-semibold uppercase tracking-[0.16em] rounded-lg border border-[var(--color-line)] transition-colors hover:text-gold text-right"
               style={{
@@ -101,8 +103,6 @@ export function Navbar() {
                 backdropFilter: "blur(14px)",
                 WebkitBackdropFilter: "blur(14px)",
               }}
-              activeProps={{ style: { color: "var(--color-gold)", backgroundColor: "rgba(8, 15, 30, 0.5)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)" } }}
-              activeOptions={{ exact: l.to === "/" }}
             >
               {l.label}
             </Link>

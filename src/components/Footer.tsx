@@ -26,8 +26,9 @@ export function Footer() {
         <div>
           <h5 className="ds-label mb-6">Navegação</h5>
           <ul className="flex flex-col gap-4 text-sm text-mute">
-            <li><Link to="/sobre" className="hover:text-cream transition-colors">Sobre a Liga</Link></li>
-            <li><Link to="/projetos" className="hover:text-cream transition-colors">Projetos</Link></li>
+            <li><Link to="/" hash="sobre" className="hover:text-cream transition-colors">Sobre a Liga</Link></li>
+            <li><Link to="/" hash="projetos" className="hover:text-cream transition-colors">Projetos</Link></li>
+            <li><Link to="/" hash="equipe" className="hover:text-cream transition-colors">Equipe</Link></li>
             <li><Link to="/login" className="hover:text-cream transition-colors">Área do Membro</Link></li>
           </ul>
         </div>

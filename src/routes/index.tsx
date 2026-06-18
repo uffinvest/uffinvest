@@ -156,20 +156,6 @@ function Index() {
         </div>
       </section>
 
-      {/* SELECTION CTA */}
-      <section className="bg-surface border-y border-line">
-        <FadeUp className="ds-container py-16 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-6">
-            <div className="size-3 bg-gold rounded-full animate-pulse" />
-            <h4 className="text-xl md:text-2xl font-serif italic text-cream text-center md:text-left">
-              Nossos processos seletivos estão <em className="ds-em">abertos.</em>
-            </h4>
-          </div>
-          <Link to="/processo-seletivo" className="btn-primary">
-            Inscrever-se agora <span>→</span>
-          </Link>
-        </FadeUp>
-      </section>
     </SiteLayout>
   );
 }

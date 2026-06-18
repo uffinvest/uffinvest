@@ -7,7 +7,6 @@ const links = [
   { to: "/", label: "Início" },
   { to: "/sobre", label: "Sobre" },
   { to: "/projetos", label: "Projetos" },
-  { to: "/processo-seletivo", label: "Processo Seletivo" },
 ] as const;
 
 export function Navbar() {

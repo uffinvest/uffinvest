@@ -134,7 +134,7 @@ function Index() {
       </section>
 
       {/* Princípios */}
-      <section className="ds-section bg-cream">
+      <section className="ds-section bg-[#D8D1BE]">
         <div className="ds-container">
           <FadeUp>
             <SectionLabel>Princípios</SectionLabel>
@@ -147,7 +147,7 @@ function Index() {
               <motion.div
                 key={p.label}
                 variants={fadeUpItem}
-                className="ds-card bg-[#D8D1BE] border-[#C9C0A8] shadow-none hover:shadow-none hover:border-[#C9C0A8]"
+                className="ds-card bg-cream border-cream shadow-none hover:shadow-none hover:border-cream"
               >
                 <span className="font-mono text-navy/70 block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}

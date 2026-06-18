@@ -112,18 +112,13 @@ function Index() {
             <h2 className="ds-h2 mb-6">
               Nossa missão no <em className="ds-em">mercado financeiro.</em>
             </h2>
-            <p className="ds-body mb-6">
-              A UFFinvest nasceu de uma percepção simples: a grade curricular da UFF não
-              prepara para o mercado financeiro. Então criamos nosso próprio espaço — para
-              estudar de verdade, produzir análises e conectar quem quer construir uma
-              carreira no setor.
-            </p>
             <p className="ds-body">
               Desde 2018, a UFFinvest reúne estudantes da Universidade Federal Fluminense que
               querem entender o mercado financeiro de verdade, não só na teoria, mas
               desenvolvendo análises, debatendo teses e se preparando para o setor.
             </p>
           </FadeUp>
+
           <FadeUpStagger className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {pillars.map((c) => (
               <motion.div key={c.n} variants={fadeUpItem} className="ds-card">
@@ -139,51 +134,29 @@ function Index() {
       </section>
 
       {/* Princípios */}
-      <section className="ds-section bg-surface">
+      <section className="ds-section bg-cream">
         <div className="ds-container">
           <FadeUp>
             <SectionLabel>Princípios</SectionLabel>
-            <h2 className="ds-h2 mb-12">
+            <h2 className="ds-h2 mb-12 text-navy">
               Missão, visão e <em className="ds-em">valores.</em>
             </h2>
           </FadeUp>
           <FadeUpStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {principles.map((p, i) => (
-              <motion.div key={p.label} variants={fadeUpItem} className="ds-card">
+              <motion.div key={p.label} variants={fadeUpItem} className="ds-card bg-navy border-line">
                 <span className="font-mono text-gold block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}
                 </span>
                 <h3 className="font-serif italic text-3xl mb-4 text-cream">{p.title}.</h3>
-                <p className="text-mute leading-relaxed">{p.text}</p>
+                <p className="text-cream/80 leading-relaxed">{p.text}</p>
               </motion.div>
             ))}
           </FadeUpStagger>
         </div>
       </section>
 
-      {/* Histórico */}
-      <section className="ds-section bg-navy">
-        <div className="ds-container">
-          <FadeUp className="mb-16">
-            <SectionLabel>Nossa História</SectionLabel>
-            <h2 className="ds-h2">
-              Oito anos formando <em className="ds-em">analistas.</em>
-            </h2>
-          </FadeUp>
-          <ol className="relative border-l border-gold-line ml-2 space-y-12">
-            {timeline.map((t, i) => (
-              <FadeUp key={t.year} delay={i * 0.05}>
-                <li className="pl-8 relative">
-                  <div className="absolute -left-[7px] top-2 size-3 bg-gold rounded-full ring-4 ring-navy" />
-                  <p className="font-mono text-gold text-sm mb-2">{t.year}</p>
-                  <h3 className="ds-h3 mb-2">{t.title}</h3>
-                  <p className="text-mute max-w-2xl leading-relaxed">{t.text}</p>
-                </li>
-              </FadeUp>
-            ))}
-          </ol>
-        </div>
-      </section>
+
 
       {/* PROJETOS */}
       <section id="projetos" className="ds-section bg-surface scroll-mt-24">
@@ -271,20 +244,21 @@ function Index() {
       </section>
 
       {/* EQUIPE */}
-      <section id="equipe" className="ds-section bg-surface scroll-mt-24">
+      <section id="equipe" className="ds-section bg-cream scroll-mt-24">
         <div className="ds-container">
           <FadeUp className="grid lg:grid-cols-12 gap-8 mb-16">
             <div className="lg:col-span-5">
               <SectionLabel>Diretoria 2026</SectionLabel>
-              <h2 className="ds-h2">
+              <h2 className="ds-h2 text-navy">
                 Nossa <em className="ds-em">equipe.</em>
               </h2>
             </div>
-            <p className="lg:col-span-6 lg:col-start-7 ds-body self-end">
+            <p className="lg:col-span-6 lg:col-start-7 ds-body text-navy/75 self-end">
               Estudantes da UFF eleitos pelos próprios membros a cada ciclo. Conduzem
               comitês, mentoram analistas júnior e representam a liga junto ao mercado.
             </p>
           </FadeUp>
+
           <FadeUpStagger className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((m, i) => (
               <motion.div

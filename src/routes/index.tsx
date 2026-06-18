@@ -147,7 +147,7 @@ function Index() {
               <motion.div
                 key={p.label}
                 variants={fadeUpItem}
-                className="ds-card bg-[#D8D1BE] border-[#C9C0A8] shadow-none hover:shadow-none hover:border-[#C9C0A8]"
+                className="ds-card bg-cream border border-gold shadow-none hover:shadow-none hover:border-gold"
               >
                 <span className="font-mono text-navy/70 block mb-4 text-[11px] uppercase tracking-[0.12em]">
                   0{i + 1} / {p.label}

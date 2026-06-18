@@ -236,3 +236,7 @@
 .animate-fade-up {
   animation: fade-up 0.8s var(--ease-out-expo) both;
 }
+
+html {
+  scroll-behavior: smooth;
+}

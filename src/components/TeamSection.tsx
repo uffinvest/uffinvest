@@ -321,6 +321,14 @@ export function TeamSection() {
           </div>
         )}
       </div>
+      <ImageCropModal
+        open={!!cropSrc}
+        imageSrc={cropSrc ?? ""}
+        aspect={3 / 4}
+        onCancel={() => setCropSrc(null)}
+        onConfirm={uploadCropped}
+      />
     </section>
   );
 }
+

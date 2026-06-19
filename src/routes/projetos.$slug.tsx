@@ -113,6 +113,25 @@ function SectorPage() {
     if (!form.title.trim()) return;
     setSaving(true);
 
+    if (editingId) {
+      const { error } = await supabase
+        .from("publications")
+        .update({
+          title: form.title.trim(),
+          summary: form.summary.trim() || null,
+          content: form.content.trim() || null,
+        })
+        .eq("id", editingId);
+      setSaving(false);
+      if (error) return toast.error(error.message);
+      toast.success("Publicação atualizada!");
+      setForm({ title: "", summary: "", content: "" });
+      setEditingId(null);
+      setOpen(false);
+      load();
+      return;
+    }
+
     // get profile name
     const { data: profile } = await supabase
       .from("profiles")
@@ -145,6 +164,19 @@ function SectorPage() {
     load();
   };
 
+  const startEdit = (p: Publication) => {
+    setEditingId(p.id);
+    setForm({ title: p.title, summary: p.summary ?? "", content: p.content ?? "" });
+    setOpen(true);
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  };
+
+  const cancelForm = () => {
+    setOpen(false);
+    setEditingId(null);
+    setForm({ title: "", summary: "", content: "" });
+  };
+
   const remove = async (id: string) => {
     if (!confirm("Excluir esta publicação?")) return;
     const { error } = await supabase.from("publications").delete().eq("id", id);
@@ -154,6 +186,7 @@ function SectorPage() {
       load();
     }
   };
+
 
   return (
     <SiteLayout>

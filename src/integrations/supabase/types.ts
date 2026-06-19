@@ -16,18 +16,24 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          can_publish: boolean
           created_at: string
           display_name: string | null
+          email: string | null
           id: string
         }
         Insert: {
+          can_publish?: boolean
           created_at?: string
           display_name?: string | null
+          email?: string | null
           id: string
         }
         Update: {
+          can_publish?: boolean
           created_at?: string
           display_name?: string | null
+          email?: string | null
           id?: string
         }
         Relationships: []
@@ -62,6 +68,36 @@ export type Database = {
           sector?: string
           summary?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          name: string
+          position: number
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name: string
+          position?: number
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          name?: string
+          position?: number
+          role?: string
+          updated_at?: string
         }
         Relationships: []
       }

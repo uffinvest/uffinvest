@@ -1,11 +1,12 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2, Pencil, X } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { toast } from "sonner";
 
 const sectors = {
@@ -76,11 +77,13 @@ function SectorPage() {
   const sector = sectors[slug as SectorSlug];
   const Icon = sector.icon;
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
 
   const [items, setItems] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", summary: "", content: "" });
   const [saving, setSaving] = useState(false);
 
@@ -109,6 +112,25 @@ function SectorPage() {
     }
     if (!form.title.trim()) return;
     setSaving(true);
+
+    if (editingId) {
+      const { error } = await supabase
+        .from("publications")
+        .update({
+          title: form.title.trim(),
+          summary: form.summary.trim() || null,
+          content: form.content.trim() || null,
+        })
+        .eq("id", editingId);
+      setSaving(false);
+      if (error) return toast.error(error.message);
+      toast.success("Publicação atualizada!");
+      setForm({ title: "", summary: "", content: "" });
+      setEditingId(null);
+      setOpen(false);
+      load();
+      return;
+    }
 
     // get profile name
     const { data: profile } = await supabase
@@ -142,6 +164,19 @@ function SectorPage() {
     load();
   };
 
+  const startEdit = (p: Publication) => {
+    setEditingId(p.id);
+    setForm({ title: p.title, summary: p.summary ?? "", content: p.content ?? "" });
+    setOpen(true);
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  };
+
+  const cancelForm = () => {
+    setOpen(false);
+    setEditingId(null);
+    setForm({ title: "", summary: "", content: "" });
+  };
+
   const remove = async (id: string) => {
     if (!confirm("Excluir esta publicação?")) return;
     const { error } = await supabase.from("publications").delete().eq("id", id);
@@ -151,6 +186,7 @@ function SectorPage() {
       load();
     }
   };
+
 
   return (
     <SiteLayout>
@@ -185,11 +221,11 @@ function SectorPage() {
             {user ? (
               <button
                 type="button"
-                onClick={() => setOpen((v) => !v)}
+                onClick={() => (open ? cancelForm() : setOpen(true))}
                 className="btn-primary inline-flex items-center gap-2 !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
               >
-                <Plus size={14} />
-                {open ? "Cancelar" : "Nova publicação"}
+                {open ? <X size={14} /> : <Plus size={14} />}
+                {open ? "Cancelar" : editingId ? "Editar publicação" : "Nova publicação"}
               </button>
             ) : (
               <button
@@ -237,9 +273,12 @@ function SectorPage() {
                   className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={cancelForm} className="btn-ghost">
+                  Cancelar
+                </button>
                 <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
-                  {saving ? "Publicando..." : "Publicar"}
+                  {saving ? "Salvando..." : editingId ? "Salvar alterações" : "Publicar"}
                 </button>
               </div>
             </form>
@@ -276,15 +315,25 @@ function SectorPage() {
                       </p>
                     </details>
                   )}
-                  {user?.id === p.author_id && (
-                    <button
-                      type="button"
-                      onClick={() => remove(p.id)}
-                      aria-label="Excluir"
-                      className="absolute top-4 right-4 text-mute hover:text-red-400 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                  {(user?.id === p.author_id || isAdmin) && (
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => startEdit(p)}
+                        aria-label="Editar"
+                        className="text-mute hover:text-gold transition-colors"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => remove(p.id)}
+                        aria-label="Excluir"
+                        className="text-mute hover:text-red-400 transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   )}
                 </article>
               ))}

@@ -13,7 +13,6 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjetosSlugRouteImport } from './routes/projetos.$slug'
 import { Route as AdminUsuariosRouteImport } from './routes/admin.usuarios'
-import { Route as ApiPublicBootstrapAdminRouteImport } from './routes/api/public/bootstrap-admin'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -35,25 +34,18 @@ const AdminUsuariosRoute = AdminUsuariosRouteImport.update({
   path: '/admin/usuarios',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicBootstrapAdminRoute = ApiPublicBootstrapAdminRouteImport.update({
-  id: '/api/public/bootstrap-admin',
-  path: '/api/public/bootstrap-admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/projetos/$slug': typeof ProjetosSlugRoute
-  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/projetos/$slug': typeof ProjetosSlugRoute
-  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,30 +53,13 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/admin/usuarios': typeof AdminUsuariosRoute
   '/projetos/$slug': typeof ProjetosSlugRoute
-  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/admin/usuarios'
-    | '/projetos/$slug'
-    | '/api/public/bootstrap-admin'
+  fullPaths: '/' | '/login' | '/admin/usuarios' | '/projetos/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/admin/usuarios'
-    | '/projetos/$slug'
-    | '/api/public/bootstrap-admin'
-  id:
-    | '__root__'
-    | '/'
-    | '/login'
-    | '/admin/usuarios'
-    | '/projetos/$slug'
-    | '/api/public/bootstrap-admin'
+  to: '/' | '/login' | '/admin/usuarios' | '/projetos/$slug'
+  id: '__root__' | '/' | '/login' | '/admin/usuarios' | '/projetos/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +67,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   AdminUsuariosRoute: typeof AdminUsuariosRoute
   ProjetosSlugRoute: typeof ProjetosSlugRoute
-  ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -125,13 +99,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsuariosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/bootstrap-admin': {
-      id: '/api/public/bootstrap-admin'
-      path: '/api/public/bootstrap-admin'
-      fullPath: '/api/public/bootstrap-admin'
-      preLoaderRoute: typeof ApiPublicBootstrapAdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -140,7 +107,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   AdminUsuariosRoute: AdminUsuariosRoute,
   ProjetosSlugRoute: ProjetosSlugRoute,
-  ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

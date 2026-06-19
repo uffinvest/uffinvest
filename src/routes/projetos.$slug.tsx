@@ -273,9 +273,12 @@ function SectorPage() {
                   className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
                 />
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={cancelForm} className="btn-ghost">
+                  Cancelar
+                </button>
                 <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
-                  {saving ? "Publicando..." : "Publicar"}
+                  {saving ? "Salvando..." : editingId ? "Salvar alterações" : "Publicar"}
                 </button>
               </div>
             </form>

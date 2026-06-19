@@ -1,14 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { FadeUp } from "@/components/FadeUp";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 
 export const Route = createFileRoute("/login")({
-  ssr: false,
   head: () => ({
     meta: [
       { title: "Login — UFFinvest" },
@@ -35,6 +32,7 @@ function LoginPage() {
     e.preventDefault();
     setBusy(true);
     try {
+      const { supabase } = await import("@/integrations/supabase/client");
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -60,6 +58,7 @@ function LoginPage() {
 
   const google = async () => {
     setBusy(true);
+    const { lovable } = await import("@/integrations/lovable");
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });

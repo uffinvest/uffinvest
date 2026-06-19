@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 import logoUFFinvest from "@/assets/logo-uffinvest.svg";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const links = [
@@ -17,11 +16,15 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    toast.success("Sessão encerrada");
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Sessão encerrada");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erro ao sair");
+    }
   };
 
   const AuthButton = ({ mobile = false }: { mobile?: boolean }) =>
@@ -30,7 +33,7 @@ export function Navbar() {
         type="button"
         onClick={() => {
           setOpen(false);
-          signOut();
+          handleSignOut();
         }}
         className={`btn-primary inline-flex items-center gap-2 ${
           mobile ? "!py-2 !px-4" : "!py-2.5 !px-6"

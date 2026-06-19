@@ -1,11 +1,12 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2, Pencil, X } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { toast } from "sonner";
 
 const sectors = {

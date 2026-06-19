@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 import logoUFFinvest from "@/assets/logo-uffinvest.svg";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const links = [
   { hash: "capa", label: "Início" },
@@ -14,6 +17,36 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+    toast.success("Sessão encerrada");
+  };
+
+  const AuthButton = ({ mobile = false }: { mobile?: boolean }) =>
+    user ? (
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(false);
+          signOut();
+        }}
+        className={`btn-primary inline-flex items-center gap-2 ${
+          mobile ? "!py-2 !px-4" : "!py-2.5 !px-6"
+        } !text-[11px] uppercase tracking-[0.12em]`}
+      >
+        <LogOut size={12} /> Sair
+      </button>
+    ) : (
+      <Link
+        to="/login"
+        onClick={() => setOpen(false)}
+        className={`btn-primary ${mobile ? "!py-2 !px-4" : "!py-2.5 !px-6"} !text-[11px] uppercase tracking-[0.12em]`}
+      >
+        Login
+      </Link>
+    );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);

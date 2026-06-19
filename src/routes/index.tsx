@@ -1,14 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { FileText, LineChart, Building2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
 import heroImg from "@/assets/touro-capa.png";
-import teamImg from "@/assets/team-collab.jpg";
-import { alumni } from "@/data/mock";
 import { TeamSection } from "@/components/TeamSection";
 import { B3Ticker } from "@/components/B3Ticker";
+import { AlumniSection } from "@/components/AlumniSection";
+import { PublicationsSection } from "@/components/PublicationsSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,66 +36,14 @@ const pillars = [
 ];
 
 const principles = [
-  {
-    label: "Missão",
-    title: "Nossa missão",
-    text: "Criar um espaço onde estudantes da UFF desenvolvem capacidade técnica real para entrar no mercado financeiro bem preparados.",
-  },
-  {
-    label: "Visão",
-    title: "Nossa visão",
-    text: "Ser reconhecida como uma liga séria, com membros que chegam ao mercado prontos, que olham para trás e valorizam o que aprenderam aqui.",
-  },
-  {
-    label: "Valores",
-    title: "Nossos valores",
-    text: "Rigor nas análises, honestidade intelectual, colaboração entre membros e melhoria a cada semestre.",
-  },
-];
-
-const timeline = [
-  { year: "2018", title: "Fundação", text: "A UFFinvest nasce no campus Gragoatá com 12 membros fundadores e o primeiro comitê de macroeconomia." },
-  { year: "2019", title: "Primeira Carta Macro", text: "Publicação do primeiro relatório macroeconômico mensal, ainda distribuído por e-mail." },
-  { year: "2020", title: "Modelo Remoto", text: "Adaptação completa para o formato online durante a pandemia, com expansão do número de inscritos." },
-  { year: "2022", title: "Parcerias Institucionais", text: "Acordos com casas de análise e gestoras para mentorias e processos de recrutamento direto." },
-  { year: "2024", title: "Setor de Equity Research", text: "Criação formal do setor fundamentalista e publicação das primeiras teses de investimento." },
-  { year: "2026", title: "Nova Diretoria", text: "Liga atinge 60 membros ativos e amplia atuação em Niterói com eventos abertos ao público." },
-];
-
-const projects = [
-  {
-    slug: "carta-macro",
-    tag: "Relatório Mensal",
-    title: "Carta Macro",
-    icon: FileText,
-    description:
-      "Publicação mensal com a leitura da liga sobre o cenário macroeconômico doméstico e global.",
-    bullets: ["Indicadores BR e globais", "Cenário fiscal e monetário", "Calls de posicionamento"],
-  },
-  {
-    slug: "analise-macroeconomica",
-    tag: "Research",
-    title: "Análise Macroeconômica",
-    icon: LineChart,
-    description:
-      "Estudos aprofundados sobre temas estruturais: política fiscal, reformas, commodities e geopolítica.",
-    bullets: ["Deep-dives temáticos", "Modelagem de cenários", "Comitê macro semanal"],
-  },
-  {
-    slug: "analise-fundamentalista",
-    tag: "Equity Research",
-    title: "Análise Fundamentalista",
-    icon: Building2,
-    description:
-      "Teses de investimento sobre empresas listadas na B3, com modelagem por DCF e múltiplos.",
-    bullets: ["Valuation por DCF", "Modelagem operacional", "Teses long e short"],
-  },
+  { label: "Missão", title: "Nossa missão", text: "Criar um espaço onde estudantes da UFF desenvolvem capacidade técnica real para entrar no mercado financeiro bem preparados." },
+  { label: "Visão", title: "Nossa visão", text: "Ser reconhecida como uma liga séria, com membros que chegam ao mercado prontos, que olham para trás e valorizam o que aprenderam aqui." },
+  { label: "Valores", title: "Nossos valores", text: "Rigor nas análises, honestidade intelectual, colaboração entre membros e melhoria a cada semestre." },
 ];
 
 function Index() {
   return (
     <SiteLayout>
-      {/* CAPA */}
       <section id="capa" className="relative min-h-screen w-full overflow-hidden bg-navy scroll-mt-24">
         <img
           src={heroImg}
@@ -110,7 +57,6 @@ function Index() {
         <B3Ticker />
       </section>
 
-      {/* SOBRE NÓS */}
       <section id="sobre" className="ds-section bg-navy scroll-mt-24">
         <div className="ds-container grid grid-cols-1 lg:grid-cols-12 gap-12">
           <FadeUp className="lg:col-span-5">
@@ -139,7 +85,6 @@ function Index() {
         </div>
       </section>
 
-      {/* Princípios */}
       <section className="ds-section bg-cream">
         <div className="ds-container">
           <FadeUp>
@@ -166,102 +111,9 @@ function Index() {
         </div>
       </section>
 
-
-
-      {/* PROJETOS */}
-      <section id="projetos" className="ds-section bg-surface scroll-mt-24">
-        <div className="ds-container mb-12">
-          <FadeUp>
-            <SectionLabel>Produção Intelectual</SectionLabel>
-            <h2 className="ds-h2 max-w-3xl">
-              Nossas <em className="ds-em">publicações.</em>
-            </h2>
-            <p className="ds-body mt-6 max-w-2xl">
-              Todo material publicado pela UFFinvest passa por revisão de diretores e tem caráter
-              estritamente educacional. Não constitui recomendação de investimento.
-            </p>
-          </FadeUp>
-        </div>
-        <FadeUpStagger className="ds-container grid gap-6 lg:grid-cols-3">
-          {projects.map((p, i) => {
-            const isAccent = i === 1;
-            return (
-              <motion.div
-                key={p.title}
-                variants={fadeUpItem}
-              >
-                <Link
-                  to="/projetos/$slug"
-                  params={{ slug: p.slug }}
-                  className="ds-card group flex flex-col min-h-[360px] lg:min-h-[440px] h-full transition-colors duration-300 bg-cream border-cream hover:bg-navy hover:border-line cursor-pointer no-underline"
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">
-                      {p.tag}
-                    </span>
-                    <p.icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
-                  </div>
-
-                  <div className="flex-1 flex items-center justify-center py-10">
-                    <h2
-                      className={
-                        (isAccent ? "italic " : "") +
-                        "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"
-                      }
-                    >
-                      {p.title}.
-                    </h2>
-                  </div>
-
-                  <ul className="space-y-2.5">
-                    {p.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-3 text-sm">
-                        <span className="size-1.5 bg-navy rounded-full mt-2 shrink-0 transition-colors duration-300 group-hover:bg-gold" />
-                        <span className="text-navy/80 transition-colors duration-300 group-hover:text-cream/80">{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </FadeUpStagger>
-      </section>
-
-      {/* ALUMNI */}
-      <section id="alumni" className="ds-section bg-navy scroll-mt-24">
-        <div className="ds-container">
-          <FadeUp className="flex justify-between items-end mb-16 flex-wrap gap-4">
-            <div>
-              <SectionLabel>Alumni Network</SectionLabel>
-              <h2 className="ds-h2">
-                Onde estão nossos <em className="ds-em">egressos.</em>
-              </h2>
-            </div>
-          </FadeUp>
-          <FadeUpStagger className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {alumni.map((a) => (
-              <motion.article key={a.name} variants={fadeUpItem} className="ds-card flex flex-col gap-6">
-                <p className="font-serif italic text-xl leading-snug text-cream">
-                  “{a.quote}”
-                </p>
-                <div className="mt-auto pt-6 border-t border-line">
-                  <p className="font-semibold text-cream">{a.name}</p>
-                  <p className="text-sm text-mute">{a.role}</p>
-                  <p className="font-mono text-[10px] text-gold uppercase tracking-[0.12em] mt-2">
-                    {a.year}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </FadeUpStagger>
-        </div>
-      </section>
-
-      {/* EQUIPE */}
+      <PublicationsSection />
+      <AlumniSection />
       <TeamSection />
-
-
     </SiteLayout>
   );
 }

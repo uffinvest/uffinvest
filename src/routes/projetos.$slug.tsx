@@ -77,11 +77,13 @@ function SectorPage() {
   const sector = sectors[slug as SectorSlug];
   const Icon = sector.icon;
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
 
   const [items, setItems] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", summary: "", content: "" });
   const [saving, setSaving] = useState(false);
 

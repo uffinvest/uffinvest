@@ -1,17 +1,6 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  FileText,
-  LineChart,
-  Building2,
-  Plus,
-  Trash2,
-  Pencil,
-  X,
-  Upload,
-  FileDown,
-} from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Pencil, X, Upload, FileDown } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
@@ -20,46 +9,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { toast } from "sonner";
 
-const sectors = {
-  "carta-macro": {
-    tag: "Relatório Mensal",
-    title: "Carta Macro",
-    icon: FileText,
-    description:
-      "Publicação mensal com a leitura da liga sobre o cenário macroeconômico doméstico e global.",
-  },
-  "analise-macroeconomica": {
-    tag: "Research",
-    title: "Análise Macroeconômica",
-    icon: LineChart,
-    description:
-      "Estudos aprofundados sobre temas estruturais: política fiscal, reformas, commodities e geopolítica.",
-  },
-  "analise-fundamentalista": {
-    tag: "Equity Research",
-    title: "Análise Fundamentalista",
-    icon: Building2,
-    description:
-      "Teses de investimento sobre empresas listadas na B3, com modelagem por DCF e múltiplos.",
-  },
-} as const;
+import { getSectorIcon } from "@/lib/sectorIcons";
 
-type SectorSlug = keyof typeof sectors;
+type Sector = {
+  slug: string;
+  tag: string;
+  title: string;
+  description: string;
+  icon: string;
+};
 
 export const Route = createFileRoute("/projetos/$slug")({
   ssr: false,
-  beforeLoad: ({ params }) => {
-    if (!(params.slug in sectors)) throw notFound();
-  },
-  head: ({ params }) => {
-    const s = sectors[params.slug as SectorSlug];
-    return {
-      meta: [
-        { title: `${s?.title ?? "Projeto"} — UFFinvest` },
-        { name: "description", content: s?.description ?? "" },
-      ],
-    };
-  },
   component: SectorPage,
   notFoundComponent: () => (
     <SiteLayout>
@@ -91,11 +52,21 @@ const SUMMARY_MAX = 200;
 
 function SectorPage() {
   const { slug } = Route.useParams();
-  const sector = sectors[slug as SectorSlug];
-  const Icon = sector.icon;
+  const [sector, setSector] = useState<Sector | null>(null);
+  const [sectorLoading, setSectorLoading] = useState(true);
   const { user } = useAuth();
   const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      setSectorLoading(true);
+      const { data } = await (supabase as any)
+        .from("sectors").select("*").eq("slug", slug).maybeSingle();
+      setSector(data as Sector | null);
+      setSectorLoading(false);
+    })();
+  }, [slug]);
 
   const [items, setItems] = useState<Publication[]>([]);
   const [loading, setLoading] = useState(true);
@@ -271,6 +242,30 @@ function SectorPage() {
     window.open(data.signedUrl, "_blank");
   };
 
+  if (sectorLoading) {
+    return (
+      <SiteLayout>
+        <section className="ds-section bg-navy pt-32">
+          <div className="ds-container text-mute">Carregando...</div>
+        </section>
+      </SiteLayout>
+    );
+  }
+  if (!sector) {
+    return (
+      <SiteLayout>
+        <section className="ds-section bg-navy pt-32">
+          <div className="ds-container text-center">
+            <h1 className="ds-h2 mb-6 text-cream">Setor não encontrado.</h1>
+            <Link to="/" hash="projetos" className="btn-primary">Voltar</Link>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  }
+
+  const Icon = getSectorIcon(sector.icon);
+
   return (
     <SiteLayout>
       <section className="ds-section bg-navy pt-32 scroll-mt-24">
@@ -296,6 +291,7 @@ function SectorPage() {
               <Icon className="size-16 text-gold/60" strokeWidth={1.25} />
             </div>
           </FadeUp>
+
 
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <h2 className="font-serif text-2xl md:text-3xl text-cream">

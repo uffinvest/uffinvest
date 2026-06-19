@@ -107,6 +107,7 @@ function Index() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-navy to-transparent" />
+        <B3Ticker />
       </section>
 
       {/* SOBRE NÓS */}

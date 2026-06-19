@@ -315,15 +315,25 @@ function SectorPage() {
                       </p>
                     </details>
                   )}
-                  {user?.id === p.author_id && (
-                    <button
-                      type="button"
-                      onClick={() => remove(p.id)}
-                      aria-label="Excluir"
-                      className="absolute top-4 right-4 text-mute hover:text-red-400 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                  {(user?.id === p.author_id || isAdmin) && (
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => startEdit(p)}
+                        aria-label="Editar"
+                        className="text-mute hover:text-gold transition-colors"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => remove(p.id)}
+                        aria-label="Excluir"
+                        className="text-mute hover:text-red-400 transition-colors"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   )}
                 </article>
               ))}

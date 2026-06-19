@@ -8,6 +8,7 @@ import teamImg from "@/assets/team-collab.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { toast } from "sonner";
+import { ImageCropModal } from "@/components/ImageCropModal";
 
 type Member = {
   id: string;
@@ -36,6 +37,7 @@ export function TeamSection() {
   const [draft, setDraft] = useState({ name: "", role: "", image_path: "" });
   const [uploading, setUploading] = useState(false);
   const [adding, setAdding] = useState(false);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = async () => {
@@ -78,21 +80,28 @@ export function TeamSection() {
     setAdding(false);
   };
 
-  const handleFile = async (file: File) => {
+  const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
       toast.error("Selecione uma imagem válida");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Imagem deve ter no máximo 5MB");
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Imagem deve ter no máximo 10MB");
       return;
     }
+    const reader = new FileReader();
+    reader.onload = () => setCropSrc(String(reader.result));
+    reader.readAsDataURL(file);
+  };
+
+  const uploadCropped = async (blob: Blob) => {
+    setCropSrc(null);
     setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
-    const path = `${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage.from("team-photos").upload(path, file, {
+    const path = `${crypto.randomUUID()}.jpg`;
+    const { error } = await supabase.storage.from("team-photos").upload(path, blob, {
       cacheControl: "3600",
       upsert: false,
+      contentType: "image/jpeg",
     });
     setUploading(false);
     if (error) {

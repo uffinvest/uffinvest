@@ -253,6 +253,30 @@ function SectorPage() {
     window.open(data.signedUrl, "_blank");
   };
 
+  if (sectorLoading) {
+    return (
+      <SiteLayout>
+        <section className="ds-section bg-navy pt-32">
+          <div className="ds-container text-mute">Carregando...</div>
+        </section>
+      </SiteLayout>
+    );
+  }
+  if (!sector) {
+    return (
+      <SiteLayout>
+        <section className="ds-section bg-navy pt-32">
+          <div className="ds-container text-center">
+            <h1 className="ds-h2 mb-6 text-cream">Setor não encontrado.</h1>
+            <Link to="/" hash="projetos" className="btn-primary">Voltar</Link>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  }
+
+  const Icon = getSectorIcon(sector.icon);
+
   return (
     <SiteLayout>
       <section className="ds-section bg-navy pt-32 scroll-mt-24">
@@ -278,6 +302,7 @@ function SectorPage() {
               <Icon className="size-16 text-gold/60" strokeWidth={1.25} />
             </div>
           </FadeUp>
+
 
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <h2 className="font-serif text-2xl md:text-3xl text-cream">

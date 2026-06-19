@@ -35,6 +35,7 @@ const sectors = {
 type SectorSlug = keyof typeof sectors;
 
 export const Route = createFileRoute("/projetos/$slug")({
+  ssr: false,
   beforeLoad: ({ params }) => {
     if (!(params.slug in sectors)) throw notFound();
   },

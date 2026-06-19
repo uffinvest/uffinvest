@@ -55,11 +55,16 @@ export function TeamSection() {
 
   // pause autoplay while editing/adding so the active card doesn't fly away
   useEffect(() => {
+    if (!emblaApi) return;
     const ap = autoplayRef.current;
     if (!ap) return;
-    if (editing || adding || editingId) ap.stop();
-    else ap.play();
-  }, [editing, adding, editingId]);
+    try {
+      if (editing || adding || editingId) ap.stop();
+      else ap.play();
+    } catch {
+      // autoplay engine not ready yet
+    }
+  }, [emblaApi, editing, adding, editingId]);
 
   const load = async () => {
     setLoading(true);

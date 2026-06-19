@@ -29,7 +29,6 @@ export function Footer() {
             <li><Link to="/" hash="sobre" className="hover:text-cream transition-colors">Sobre a Liga</Link></li>
             <li><Link to="/" hash="projetos" className="hover:text-cream transition-colors">Projetos</Link></li>
             <li><Link to="/" hash="equipe" className="hover:text-cream transition-colors">Equipe</Link></li>
-            <li><Link to="/login" className="hover:text-cream transition-colors">Área do Membro</Link></li>
           </ul>
         </div>
         <div>

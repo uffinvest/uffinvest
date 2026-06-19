@@ -181,7 +181,7 @@ export function PublicationsSection() {
                         <span className="font-mono text-[10px] text-navy group-hover:text-cream uppercase tracking-[0.16em] transition-colors duration-300">
                           {p.tag}
                         </span>
-                        <Icon className="hidden md:block size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
+                        <Icon className="size-4 text-navy/60 transition-colors duration-300 group-hover:text-faint" strokeWidth={1.5} />
                       </div>
                       <div className="flex-1 flex items-center justify-center py-10">
                         <h2 className={(isAccent ? "italic " : "") + "font-serif text-navy text-3xl md:text-4xl text-center leading-tight transition-colors duration-300 group-hover:text-cream"}>

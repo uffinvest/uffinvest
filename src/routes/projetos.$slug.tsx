@@ -287,7 +287,7 @@ function SectorPage() {
               </h1>
               <p className="ds-body max-w-2xl">{sector.description}</p>
             </div>
-            <div className="lg:col-span-4 flex lg:justify-end items-start">
+            <div className="hidden md:flex lg:col-span-4 lg:justify-end items-start">
               <Icon className="size-16 text-gold/60" strokeWidth={1.25} />
             </div>
           </FadeUp>

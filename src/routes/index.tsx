@@ -8,6 +8,7 @@ import heroImg from "@/assets/touro-capa.png";
 import teamImg from "@/assets/team-collab.jpg";
 import { alumni } from "@/data/mock";
 import { TeamSection } from "@/components/TeamSection";
+import { B3Ticker } from "@/components/B3Ticker";
 
 export const Route = createFileRoute("/")({
   head: () => ({

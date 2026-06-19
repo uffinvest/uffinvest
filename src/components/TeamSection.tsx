@@ -284,7 +284,7 @@ export function TeamSection() {
                           loading="lazy"
                           width={400}
                           height={533}
-                          className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                          className="absolute inset-0 w-full h-full object-cover transition-all duration-500"
                           style={!signedUrls[m.id] ? { objectPosition: `${(i * 17) % 100}% center` } : undefined}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />

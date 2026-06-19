@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { Link } from "@tanstack/react-router";
-import { Pencil, Plus, Trash2, X, Check, Users, Upload } from "lucide-react";
-import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
+import { Pencil, Plus, Trash2, X, Check, Users, Upload, ChevronLeft, ChevronRight } from "lucide-react";
+import { FadeUp } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
 import teamImg from "@/assets/team-collab.jpg";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,7 +20,7 @@ type Member = {
   position: number;
 };
 
-const SIGN_EXPIRY = 60 * 60 * 24 * 365 * 5; // 5 years
+const SIGN_EXPIRY = 60 * 60 * 24 * 365 * 5;
 
 async function signIfNeeded(path: string | null): Promise<string | null> {
   if (!path) return null;
@@ -40,6 +42,25 @@ export function TeamSection() {
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const autoplayRef = useRef(
+    Autoplay({ delay: 3500, stopOnInteraction: false, stopOnMouseEnter: true }),
+  );
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, align: "start", slidesToScroll: 1 },
+    [autoplayRef.current],
+  );
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  // pause autoplay while editing/adding so the active card doesn't fly away
+  useEffect(() => {
+    const ap = autoplayRef.current;
+    if (!ap) return;
+    if (editing || adding || editingId) ap.stop();
+    else ap.play();
+  }, [editing, adding, editingId]);
+
   const load = async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -50,7 +71,6 @@ export function TeamSection() {
     else {
       const list = (data ?? []) as Member[];
       setMembers(list);
-      // sign URLs in parallel
       const entries = await Promise.all(
         list.map(async (m) => [m.id, await signIfNeeded(m.image_url)] as const),
       );
@@ -62,6 +82,11 @@ export function TeamSection() {
   useEffect(() => {
     load();
   }, []);
+
+  // reinit embla when slide count changes
+  useEffect(() => {
+    emblaApi?.reInit();
+  }, [emblaApi, members.length, editing, adding]);
 
   const startEdit = (m: Member) => {
     setEditingId(m.id);
@@ -231,83 +256,118 @@ export function TeamSection() {
         {loading ? (
           <div className="text-navy/60">Carregando equipe...</div>
         ) : (
-          <FadeUpStagger className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {members.map((m, i) => {
-              const isEditingThis = editingId === m.id;
-              const img = signedUrls[m.id] || teamImg;
-              return (
-                <motion.div
-                  key={m.id}
-                  variants={fadeUpItem}
-                  className="aspect-[3/4] relative group overflow-hidden rounded-xl border border-line hover:border-gold-line transition-all"
-                >
-                  <img
-                    src={img}
-                    alt={m.name}
-                    loading="lazy"
-                    width={400}
-                    height={533}
-                    className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                    style={!signedUrls[m.id] ? { objectPosition: `${(i * 17) % 100}% center` } : undefined}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+          <div className="relative">
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex -ml-6">
+                {members.map((m, i) => {
+                  const isEditingThis = editingId === m.id;
+                  const img = signedUrls[m.id] || teamImg;
+                  return (
+                    <div
+                      key={m.id}
+                      className="flex-[0_0_100%] md:flex-[0_0_33.3333%] min-w-0 pl-6"
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="aspect-[3/4] relative group overflow-hidden rounded-xl border border-line hover:border-gold-line transition-all"
+                      >
+                        <img
+                          src={img}
+                          alt={m.name}
+                          loading="lazy"
+                          width={400}
+                          height={533}
+                          className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                          style={!signedUrls[m.id] ? { objectPosition: `${(i * 17) % 100}% center` } : undefined}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
 
-                  {isEditingThis ? (
-                    <div className="absolute inset-0 p-3 bg-navy/90 backdrop-blur-sm">
-                      {renderEditForm("edit")}
+                        {isEditingThis ? (
+                          <div className="absolute inset-0 p-3 bg-navy/90 backdrop-blur-sm">
+                            {renderEditForm("edit")}
+                          </div>
+                        ) : (
+                          <>
+                            <div className="absolute bottom-0 left-0 p-5 text-cream">
+                              <p className="font-mono text-[10px] text-gold uppercase tracking-[0.12em] mb-1">
+                                {String(i + 1).padStart(2, "0")}
+                              </p>
+                              <p className="font-semibold text-base leading-tight">{m.name}</p>
+                              <p className="text-sm text-mute">{m.role}</p>
+                            </div>
+                            {isAdmin && editing && (
+                              <div className="absolute top-2 right-2 flex gap-1.5 z-10">
+                                <button
+                                  type="button"
+                                  onClick={() => startEdit(m)}
+                                  aria-label="Editar membro"
+                                  className="size-8 inline-flex items-center justify-center rounded-full bg-navy/80 text-cream hover:text-gold transition-colors"
+                                >
+                                  <Pencil size={13} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => remove(m)}
+                                  aria-label="Remover membro"
+                                  className="size-8 inline-flex items-center justify-center rounded-full bg-navy/80 text-cream hover:text-red-400 transition-colors"
+                                >
+                                  <Trash2 size={13} />
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </motion.div>
                     </div>
-                  ) : (
-                    <>
-                      <div className="absolute bottom-0 left-0 p-5 text-cream">
-                        <p className="font-mono text-[10px] text-gold uppercase tracking-[0.12em] mb-1">
-                          {String(i + 1).padStart(2, "0")}
-                        </p>
-                        <p className="font-semibold text-base leading-tight">{m.name}</p>
-                        <p className="text-sm text-mute">{m.role}</p>
-                      </div>
-                      {isAdmin && editing && (
-                        <div className="absolute top-2 right-2 flex gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => startEdit(m)}
-                            aria-label="Editar membro"
-                            className="size-8 inline-flex items-center justify-center rounded-full bg-navy/80 text-cream hover:text-gold transition-colors"
-                          >
-                            <Pencil size={13} />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => remove(m)}
-                            aria-label="Remover membro"
-                            className="size-8 inline-flex items-center justify-center rounded-full bg-navy/80 text-cream hover:text-red-400 transition-colors"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </motion.div>
-              );
-            })}
+                  );
+                })}
 
-            {isAdmin && editing && !adding && (
-              <button
-                type="button"
-                onClick={startAdd}
-                className="aspect-[3/4] flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-navy/30 text-navy/60 hover:border-gold hover:text-gold-hover transition-colors"
-              >
-                <Plus size={28} />
-                <span className="text-xs uppercase tracking-[0.12em]">Adicionar</span>
-              </button>
-            )}
+                {isAdmin && editing && !adding && (
+                  <div className="flex-[0_0_100%] md:flex-[0_0_33.3333%] min-w-0 pl-6">
+                    <button
+                      type="button"
+                      onClick={startAdd}
+                      className="aspect-[3/4] w-full flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-navy/30 text-navy/60 hover:border-gold hover:text-gold-hover transition-colors"
+                    >
+                      <Plus size={28} />
+                      <span className="text-xs uppercase tracking-[0.12em]">Adicionar</span>
+                    </button>
+                  </div>
+                )}
 
-            {isAdmin && adding && (
-              <div className="aspect-[3/4] rounded-xl border border-gold p-3 bg-navy/90">
-                {renderEditForm("add")}
+                {isAdmin && adding && (
+                  <div className="flex-[0_0_100%] md:flex-[0_0_33.3333%] min-w-0 pl-6">
+                    <div className="aspect-[3/4] rounded-xl border border-gold p-3 bg-navy/90">
+                      {renderEditForm("add")}
+                    </div>
+                  </div>
+                )}
               </div>
+            </div>
+
+            {members.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={scrollPrev}
+                  aria-label="Anterior"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 size-10 rounded-full bg-navy/80 text-cream backdrop-blur-sm flex items-center justify-center hover:bg-navy transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={scrollNext}
+                  aria-label="Próximo"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 size-10 rounded-full bg-navy/80 text-cream backdrop-blur-sm flex items-center justify-center hover:bg-navy transition-colors"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </>
             )}
-          </FadeUpStagger>
+          </div>
         )}
 
         {isAdmin && (
@@ -331,4 +391,3 @@ export function TeamSection() {
     </section>
   );
 }
-

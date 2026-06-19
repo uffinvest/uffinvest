@@ -89,19 +89,11 @@ export function Navbar() {
             {l.label}
           </Link>
         ))}
-        <Link to="/login" className="btn-primary !py-2.5 !px-6 !text-[11px] uppercase tracking-[0.12em]">
-          Login
-        </Link>
+        <AuthButton />
       </div>
 
       <div className="lg:hidden flex items-center gap-3">
-        <Link
-          to="/login"
-          onClick={() => setOpen(false)}
-          className="btn-primary !py-2 !px-4 !text-[11px] uppercase tracking-[0.12em]"
-        >
-          Login
-        </Link>
+        <AuthButton mobile />
         <button
           type="button"
           aria-label={open ? "Fechar menu" : "Abrir menu"}

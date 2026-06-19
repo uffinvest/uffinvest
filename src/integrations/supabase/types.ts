@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      alumni: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          position: number
+          quote: string
+          role: string
+          updated_at: string
+          year: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          position?: number
+          quote: string
+          role: string
+          updated_at?: string
+          year: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          position?: number
+          quote?: string
+          role?: string
+          updated_at?: string
+          year?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           can_publish: boolean
@@ -74,6 +107,42 @@ export type Database = {
           sector?: string
           summary?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      sectors: {
+        Row: {
+          bullets: string[]
+          created_at: string
+          description: string
+          icon: string
+          position: number
+          slug: string
+          tag: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          bullets?: string[]
+          created_at?: string
+          description: string
+          icon?: string
+          position?: number
+          slug: string
+          tag: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          bullets?: string[]
+          created_at?: string
+          description?: string
+          icon?: string
+          position?: number
+          slug?: string
+          tag?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }

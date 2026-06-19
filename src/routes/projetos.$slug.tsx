@@ -1,9 +1,12 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowLeft, FileText, LineChart, Building2, Plus } from "lucide-react";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2 } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const sectors = {
   "carta-macro": {
@@ -60,35 +63,92 @@ export const Route = createFileRoute("/projetos/$slug")({
 type Publication = {
   id: string;
   title: string;
-  summary: string;
-  author: string;
-  date: string;
+  summary: string | null;
+  content: string | null;
+  author_id: string;
+  author_name: string;
+  created_at: string;
 };
 
 function SectorPage() {
   const { slug } = Route.useParams();
   const sector = sectors[slug as SectorSlug];
   const Icon = sector.icon;
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [items, setItems] = useState<Publication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ title: "", summary: "", author: "" });
+  const [form, setForm] = useState({ title: "", summary: "", content: "" });
+  const [saving, setSaving] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("publications")
+      .select("*")
+      .eq("sector", slug)
+      .order("created_at", { ascending: false });
+    if (error) toast.error("Erro ao carregar publicações");
+    else setItems((data ?? []) as Publication[]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      toast.error("Faça login para publicar");
+      return;
+    }
     if (!form.title.trim()) return;
-    setItems((prev) => [
-      {
-        id: crypto.randomUUID(),
-        title: form.title.trim(),
-        summary: form.summary.trim(),
-        author: form.author.trim() || "Anônimo",
-        date: new Date().toLocaleDateString("pt-BR"),
-      },
-      ...prev,
-    ]);
-    setForm({ title: "", summary: "", author: "" });
+    setSaving(true);
+
+    // get profile name
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", user.id)
+      .maybeSingle();
+    const authorName =
+      profile?.display_name ||
+      (user.user_metadata?.display_name as string | undefined) ||
+      (user.user_metadata?.full_name as string | undefined) ||
+      user.email?.split("@")[0] ||
+      "Membro";
+
+    const { error } = await supabase.from("publications").insert({
+      sector: slug,
+      title: form.title.trim(),
+      summary: form.summary.trim() || null,
+      content: form.content.trim() || null,
+      author_id: user.id,
+      author_name: authorName,
+    });
+    setSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Publicação criada!");
+    setForm({ title: "", summary: "", content: "" });
     setOpen(false);
+    load();
+  };
+
+  const remove = async (id: string) => {
+    if (!confirm("Excluir esta publicação?")) return;
+    const { error } = await supabase.from("publications").delete().eq("id", id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Publicação excluída");
+      load();
+    }
   };
 
   return (
@@ -121,21 +181,28 @@ function SectorPage() {
             <h2 className="font-serif text-2xl md:text-3xl text-cream">
               Publicações<em className="ds-em">.</em>
             </h2>
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              className="btn-primary inline-flex items-center gap-2 !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
-            >
-              <Plus size={14} />
-              {open ? "Cancelar" : "Nova publicação"}
-            </button>
+            {user ? (
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                className="btn-primary inline-flex items-center gap-2 !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
+              >
+                <Plus size={14} />
+                {open ? "Cancelar" : "Nova publicação"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/login" })}
+                className="btn-primary !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
+              >
+                Entrar para publicar
+              </button>
+            )}
           </div>
 
-          {open && (
-            <form
-              onSubmit={submit}
-              className="ds-card mb-10 grid gap-4 bg-surface border-line"
-            >
+          {open && user && (
+            <form onSubmit={submit} className="ds-card mb-10 grid gap-4 bg-surface border-line">
               <div>
                 <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
                   Título
@@ -154,55 +221,74 @@ function SectorPage() {
                 <textarea
                   value={form.summary}
                   onChange={(e) => setForm({ ...form, summary: e.target.value })}
-                  rows={4}
+                  rows={3}
                   className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
                 />
               </div>
               <div>
                 <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
-                  Autor(es)
+                  Conteúdo completo (opcional)
                 </label>
-                <input
-                  value={form.author}
-                  onChange={(e) => setForm({ ...form, author: e.target.value })}
-                  className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors"
+                <textarea
+                  value={form.content}
+                  onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  rows={8}
+                  className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
                 />
               </div>
               <div className="flex justify-end">
-                <button type="submit" className="btn-primary">
-                  Publicar
+                <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
+                  {saving ? "Publicando..." : "Publicar"}
                 </button>
               </div>
             </form>
           )}
 
-          {items.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-16 text-mute">Carregando publicações...</div>
+          ) : items.length === 0 ? (
             <div className="ds-card bg-surface border-line text-center py-16">
               <p className="text-mute">
-                Nenhuma publicação ainda. Use o botão acima para adicionar a primeira.
+                Nenhuma publicação ainda{user ? ". Use o botão acima para adicionar a primeira." : "."}
               </p>
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2">
               {items.map((p) => (
-                <article key={p.id} className="ds-card bg-surface border-line">
+                <article key={p.id} className="ds-card bg-surface border-line relative">
                   <p className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] mb-3">
-                    {p.date} · {p.author}
+                    {new Date(p.created_at).toLocaleDateString("pt-BR")} · {p.author_name}
                   </p>
                   <h3 className="font-serif text-2xl text-cream mb-3">{p.title}</h3>
                   {p.summary && (
-                    <p className="text-sm text-mute leading-relaxed whitespace-pre-line">
+                    <p className="text-sm text-mute leading-relaxed whitespace-pre-line mb-3">
                       {p.summary}
                     </p>
+                  )}
+                  {p.content && (
+                    <details className="mt-3">
+                      <summary className="text-xs text-gold cursor-pointer hover:text-gold-hover">
+                        Ler conteúdo completo
+                      </summary>
+                      <p className="text-sm text-mute leading-relaxed whitespace-pre-line mt-3">
+                        {p.content}
+                      </p>
+                    </details>
+                  )}
+                  {user?.id === p.author_id && (
+                    <button
+                      type="button"
+                      onClick={() => remove(p.id)}
+                      aria-label="Excluir"
+                      className="absolute top-4 right-4 text-mute hover:text-red-400 transition-colors"
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   )}
                 </article>
               ))}
             </div>
           )}
-
-          <p className="text-xs text-faint mt-10">
-            Layout de demonstração — as publicações ficam salvas apenas nesta sessão.
-          </p>
         </div>
       </section>
     </SiteLayout>

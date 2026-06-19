@@ -221,11 +221,11 @@ function SectorPage() {
             {user ? (
               <button
                 type="button"
-                onClick={() => setOpen((v) => !v)}
+                onClick={() => (open ? cancelForm() : setOpen(true))}
                 className="btn-primary inline-flex items-center gap-2 !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
               >
-                <Plus size={14} />
-                {open ? "Cancelar" : "Nova publicação"}
+                {open ? <X size={14} /> : <Plus size={14} />}
+                {open ? "Cancelar" : editingId ? "Editar publicação" : "Nova publicação"}
               </button>
             ) : (
               <button

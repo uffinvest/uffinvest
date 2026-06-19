@@ -1,6 +1,17 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowLeft, FileText, LineChart, Building2, Plus, Trash2, Pencil, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  FileText,
+  LineChart,
+  Building2,
+  Plus,
+  Trash2,
+  Pencil,
+  X,
+  Upload,
+  FileDown,
+} from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
@@ -69,8 +80,14 @@ type Publication = {
   content: string | null;
   author_id: string;
   author_name: string;
+  authors: string | null;
+  pdf_url: string | null;
   created_at: string;
 };
+
+const SIGN_EXPIRY = 60 * 60 * 24 * 365 * 5;
+
+const SUMMARY_MAX = 200;
 
 function SectorPage() {
   const { slug } = Route.useParams();
@@ -84,8 +101,16 @@ function SectorPage() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", summary: "", content: "" });
+  const [form, setForm] = useState({
+    authors: "",
+    title: "",
+    summary: "",
+    pdf_path: "",
+  });
+  const [canPublish, setCanPublish] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     setLoading(true);
@@ -104,6 +129,56 @@ function SectorPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
+  useEffect(() => {
+    if (!user) {
+      setCanPublish(false);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("can_publish")
+        .eq("id", user.id)
+        .maybeSingle();
+      setCanPublish(Boolean(data?.can_publish));
+    })();
+  }, [user]);
+
+  const allowedToPublish = canPublish || isAdmin;
+
+  const resetForm = () => {
+    setForm({ authors: "", title: "", summary: "", pdf_path: "" });
+    setEditingId(null);
+  };
+
+  const cancelForm = () => {
+    setOpen(false);
+    resetForm();
+  };
+
+  const handlePdfUpload = async (file: File) => {
+    if (file.type !== "application/pdf") {
+      toast.error("Envie um arquivo PDF");
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      toast.error("PDF deve ter no máximo 25MB");
+      return;
+    }
+    setUploadingPdf(true);
+    const path = `${slug}/${crypto.randomUUID()}.pdf`;
+    const { error } = await supabase.storage
+      .from("publication-pdfs")
+      .upload(path, file, { contentType: "application/pdf", upsert: false });
+    setUploadingPdf(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setForm((f) => ({ ...f, pdf_path: path }));
+    toast.success("PDF enviado");
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
@@ -111,6 +186,14 @@ function SectorPage() {
       return;
     }
     if (!form.title.trim()) return;
+    if (!form.authors.trim()) {
+      toast.error("Informe os autores");
+      return;
+    }
+    if (form.summary.length > SUMMARY_MAX) {
+      toast.error(`Prévia: máximo ${SUMMARY_MAX} caracteres`);
+      return;
+    }
     setSaving(true);
 
     if (editingId) {
@@ -119,39 +202,27 @@ function SectorPage() {
         .update({
           title: form.title.trim(),
           summary: form.summary.trim() || null,
-          content: form.content.trim() || null,
+          authors: form.authors.trim(),
+          author_name: form.authors.trim(),
+          pdf_url: form.pdf_path || null,
         })
         .eq("id", editingId);
       setSaving(false);
       if (error) return toast.error(error.message);
       toast.success("Publicação atualizada!");
-      setForm({ title: "", summary: "", content: "" });
-      setEditingId(null);
-      setOpen(false);
+      cancelForm();
       load();
       return;
     }
-
-    // get profile name
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("display_name")
-      .eq("id", user.id)
-      .maybeSingle();
-    const authorName =
-      profile?.display_name ||
-      (user.user_metadata?.display_name as string | undefined) ||
-      (user.user_metadata?.full_name as string | undefined) ||
-      user.email?.split("@")[0] ||
-      "Membro";
 
     const { error } = await supabase.from("publications").insert({
       sector: slug,
       title: form.title.trim(),
       summary: form.summary.trim() || null,
-      content: form.content.trim() || null,
+      authors: form.authors.trim(),
+      author_name: form.authors.trim(),
+      pdf_url: form.pdf_path || null,
       author_id: user.id,
-      author_name: authorName,
     });
     setSaving(false);
     if (error) {
@@ -159,22 +230,20 @@ function SectorPage() {
       return;
     }
     toast.success("Publicação criada!");
-    setForm({ title: "", summary: "", content: "" });
-    setOpen(false);
+    cancelForm();
     load();
   };
 
   const startEdit = (p: Publication) => {
     setEditingId(p.id);
-    setForm({ title: p.title, summary: p.summary ?? "", content: p.content ?? "" });
+    setForm({
+      authors: p.authors ?? p.author_name ?? "",
+      title: p.title,
+      summary: p.summary ?? "",
+      pdf_path: p.pdf_url ?? "",
+    });
     setOpen(true);
     window.scrollTo({ top: 200, behavior: "smooth" });
-  };
-
-  const cancelForm = () => {
-    setOpen(false);
-    setEditingId(null);
-    setForm({ title: "", summary: "", content: "" });
   };
 
   const remove = async (id: string) => {
@@ -187,6 +256,20 @@ function SectorPage() {
     }
   };
 
+  const openPdf = async (path: string) => {
+    if (path.startsWith("http")) {
+      window.open(path, "_blank");
+      return;
+    }
+    const { data, error } = await supabase.storage
+      .from("publication-pdfs")
+      .createSignedUrl(path, SIGN_EXPIRY);
+    if (error || !data?.signedUrl) {
+      toast.error("Erro ao abrir PDF");
+      return;
+    }
+    window.open(data.signedUrl, "_blank");
+  };
 
   return (
     <SiteLayout>
@@ -218,7 +301,15 @@ function SectorPage() {
             <h2 className="font-serif text-2xl md:text-3xl text-cream">
               Publicações<em className="ds-em">.</em>
             </h2>
-            {user ? (
+            {!user ? (
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/login" })}
+                className="btn-primary !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
+              >
+                Entrar para publicar
+              </button>
+            ) : allowedToPublish ? (
               <button
                 type="button"
                 onClick={() => (open ? cancelForm() : setOpen(true))}
@@ -228,18 +319,26 @@ function SectorPage() {
                 {open ? "Cancelar" : editingId ? "Editar publicação" : "Nova publicação"}
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={() => navigate({ to: "/login" })}
-                className="btn-primary !py-2.5 !px-5 !text-[11px] uppercase tracking-[0.12em]"
-              >
-                Entrar para publicar
-              </button>
+              <span className="text-xs text-mute italic">
+                Sem permissão para publicar. Solicite a um administrador.
+              </span>
             )}
           </div>
 
-          {open && user && (
+          {open && user && allowedToPublish && (
             <form onSubmit={submit} className="ds-card mb-10 grid gap-4 bg-surface border-line">
+              <div>
+                <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
+                  Autores
+                </label>
+                <input
+                  required
+                  value={form.authors}
+                  onChange={(e) => setForm({ ...form, authors: e.target.value })}
+                  placeholder="Ex.: João Silva, Maria Souza"
+                  className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors"
+                />
+              </div>
               <div>
                 <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
                   Título
@@ -252,11 +351,21 @@ function SectorPage() {
                 />
               </div>
               <div>
-                <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
-                  Resumo
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-[11px] uppercase tracking-[0.12em] text-mute">
+                    Prévia
+                  </label>
+                  <span
+                    className={`text-[10px] font-mono ${
+                      form.summary.length > SUMMARY_MAX ? "text-red-400" : "text-mute"
+                    }`}
+                  >
+                    {form.summary.length}/{SUMMARY_MAX}
+                  </span>
+                </div>
                 <textarea
                   value={form.summary}
+                  maxLength={SUMMARY_MAX}
                   onChange={(e) => setForm({ ...form, summary: e.target.value })}
                   rows={3}
                   className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
@@ -264,14 +373,31 @@ function SectorPage() {
               </div>
               <div>
                 <label className="block text-[11px] uppercase tracking-[0.12em] text-mute mb-2">
-                  Conteúdo completo (opcional)
+                  Análise (PDF)
                 </label>
-                <textarea
-                  value={form.content}
-                  onChange={(e) => setForm({ ...form, content: e.target.value })}
-                  rows={8}
-                  className="w-full bg-navy border border-line rounded-lg px-4 py-3 text-cream outline-none focus:border-gold transition-colors resize-y"
+                <input
+                  ref={pdfInputRef}
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => e.target.files?.[0] && handlePdfUpload(e.target.files[0])}
+                  className="hidden"
                 />
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => pdfInputRef.current?.click()}
+                    disabled={uploadingPdf}
+                    className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.12em] border border-line hover:border-gold rounded-md px-4 py-2.5 text-cream transition-colors disabled:opacity-50"
+                  >
+                    <Upload size={14} />
+                    {uploadingPdf ? "Enviando..." : form.pdf_path ? "Trocar PDF" : "Enviar PDF"}
+                  </button>
+                  {form.pdf_path && (
+                    <span className="text-xs text-mute truncate max-w-xs">
+                      ✓ {form.pdf_path.split("/").pop()}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={cancelForm} className="btn-ghost">
@@ -289,7 +415,8 @@ function SectorPage() {
           ) : items.length === 0 ? (
             <div className="ds-card bg-surface border-line text-center py-16">
               <p className="text-mute">
-                Nenhuma publicação ainda{user ? ". Use o botão acima para adicionar a primeira." : "."}
+                Nenhuma publicação ainda
+                {user && allowedToPublish ? ". Use o botão acima para adicionar a primeira." : "."}
               </p>
             </div>
           ) : (
@@ -297,7 +424,8 @@ function SectorPage() {
               {items.map((p) => (
                 <article key={p.id} className="ds-card bg-surface border-line relative">
                   <p className="font-mono text-[10px] text-gold uppercase tracking-[0.16em] mb-3">
-                    {new Date(p.created_at).toLocaleDateString("pt-BR")} · {p.author_name}
+                    {new Date(p.created_at).toLocaleDateString("pt-BR")} ·{" "}
+                    {p.authors || p.author_name}
                   </p>
                   <h3 className="font-serif text-2xl text-cream mb-3">{p.title}</h3>
                   {p.summary && (
@@ -305,15 +433,14 @@ function SectorPage() {
                       {p.summary}
                     </p>
                   )}
-                  {p.content && (
-                    <details className="mt-3">
-                      <summary className="text-xs text-gold cursor-pointer hover:text-gold-hover">
-                        Ler conteúdo completo
-                      </summary>
-                      <p className="text-sm text-mute leading-relaxed whitespace-pre-line mt-3">
-                        {p.content}
-                      </p>
-                    </details>
+                  {p.pdf_url && (
+                    <button
+                      type="button"
+                      onClick={() => openPdf(p.pdf_url!)}
+                      className="mt-3 inline-flex items-center gap-2 text-xs text-gold hover:text-gold-hover transition-colors"
+                    >
+                      <FileDown size={14} /> Abrir análise (PDF)
+                    </button>
                   )}
                   {(user?.id === p.author_id || isAdmin) && (
                     <div className="absolute top-4 right-4 flex gap-2">

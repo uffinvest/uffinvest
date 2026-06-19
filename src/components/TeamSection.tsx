@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { Pencil, Plus, Trash2, X, Check, Users } from "lucide-react";
+import { Pencil, Plus, Trash2, X, Check, Users, Upload } from "lucide-react";
 import { FadeUp, FadeUpStagger, fadeUpItem } from "@/components/FadeUp";
 import { SectionLabel } from "@/components/SectionLabel";
 import teamImg from "@/assets/team-collab.jpg";
@@ -17,14 +17,26 @@ type Member = {
   position: number;
 };
 
+const SIGN_EXPIRY = 60 * 60 * 24 * 365 * 5; // 5 years
+
+async function signIfNeeded(path: string | null): Promise<string | null> {
+  if (!path) return null;
+  if (path.startsWith("http")) return path;
+  const { data } = await supabase.storage.from("team-photos").createSignedUrl(path, SIGN_EXPIRY);
+  return data?.signedUrl ?? null;
+}
+
 export function TeamSection() {
   const { isAdmin } = useIsAdmin();
   const [members, setMembers] = useState<Member[]>([]);
+  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState({ name: "", role: "", image_url: "" });
+  const [draft, setDraft] = useState({ name: "", role: "", image_path: "" });
+  const [uploading, setUploading] = useState(false);
   const [adding, setAdding] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = async () => {
     setLoading(true);
@@ -33,7 +45,15 @@ export function TeamSection() {
       .select("*")
       .order("position", { ascending: true });
     if (error) toast.error("Erro ao carregar equipe");
-    else setMembers((data ?? []) as Member[]);
+    else {
+      const list = (data ?? []) as Member[];
+      setMembers(list);
+      // sign URLs in parallel
+      const entries = await Promise.all(
+        list.map(async (m) => [m.id, await signIfNeeded(m.image_url)] as const),
+      );
+      setSignedUrls(Object.fromEntries(entries.filter(([, v]) => v)) as Record<string, string>);
+    }
     setLoading(false);
   };
 
@@ -44,18 +64,43 @@ export function TeamSection() {
   const startEdit = (m: Member) => {
     setEditingId(m.id);
     setAdding(false);
-    setDraft({ name: m.name, role: m.role, image_url: m.image_url ?? "" });
+    setDraft({ name: m.name, role: m.role, image_path: m.image_url ?? "" });
   };
 
   const startAdd = () => {
     setAdding(true);
     setEditingId(null);
-    setDraft({ name: "", role: "", image_url: "" });
+    setDraft({ name: "", role: "", image_path: "" });
   };
 
   const cancel = () => {
     setEditingId(null);
     setAdding(false);
+  };
+
+  const handleFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selecione uma imagem válida");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Imagem deve ter no máximo 5MB");
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("team-photos").upload(path, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+    setUploading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setDraft((d) => ({ ...d, image_path: path }));
+    toast.success("Foto carregada");
   };
 
   const save = async () => {
@@ -68,7 +113,7 @@ export function TeamSection() {
       const { error } = await supabase.from("team_members").insert({
         name: draft.name.trim(),
         role: draft.role.trim(),
-        image_url: draft.image_url.trim() || null,
+        image_url: draft.image_path.trim() || null,
         position: nextPos,
       });
       if (error) return toast.error(error.message);
@@ -79,7 +124,7 @@ export function TeamSection() {
         .update({
           name: draft.name.trim(),
           role: draft.role.trim(),
-          image_url: draft.image_url.trim() || null,
+          image_url: draft.image_path.trim() || null,
         })
         .eq("id", editingId);
       if (error) return toast.error(error.message);
@@ -98,6 +143,53 @@ export function TeamSection() {
       load();
     }
   };
+
+  const renderEditForm = (mode: "edit" | "add") => (
+    <div className="flex flex-col gap-2 h-full">
+      <input
+        value={draft.name}
+        onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+        placeholder="Nome"
+        className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
+      />
+      <input
+        value={draft.role}
+        onChange={(e) => setDraft({ ...draft, role: e.target.value })}
+        placeholder="Cargo"
+        className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
+      />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+        className="hidden"
+      />
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={uploading}
+        className="inline-flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.12em] border border-line hover:border-gold rounded px-2 py-1.5 text-cream transition-colors disabled:opacity-50"
+      >
+        <Upload size={12} />
+        {uploading ? "Enviando..." : draft.image_path ? "Trocar foto" : "Enviar foto"}
+      </button>
+      {draft.image_path && (
+        <p className="text-[9px] text-mute truncate">✓ Foto selecionada</p>
+      )}
+      <div className="mt-auto flex gap-2">
+        <button onClick={save} className="flex-1 btn-primary !py-1.5 !px-2 !text-[10px]">
+          {mode === "add" ? "Adicionar" : "Salvar"}
+        </button>
+        <button
+          onClick={cancel}
+          className="size-8 inline-flex items-center justify-center border border-line rounded text-cream"
+        >
+          <X size={14} />
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <section id="equipe" className="ds-section bg-cream scroll-mt-24">
@@ -133,7 +225,7 @@ export function TeamSection() {
           <FadeUpStagger className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {members.map((m, i) => {
               const isEditingThis = editingId === m.id;
-              const img = m.image_url || teamImg;
+              const img = signedUrls[m.id] || teamImg;
               return (
                 <motion.div
                   key={m.id}
@@ -147,41 +239,13 @@ export function TeamSection() {
                     width={400}
                     height={533}
                     className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                    style={!m.image_url ? { objectPosition: `${(i * 17) % 100}% center` } : undefined}
+                    style={!signedUrls[m.id] ? { objectPosition: `${(i * 17) % 100}% center` } : undefined}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
 
                   {isEditingThis ? (
-                    <div className="absolute inset-0 p-3 flex flex-col gap-2 bg-navy/85 backdrop-blur-sm">
-                      <input
-                        value={draft.name}
-                        onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                        placeholder="Nome"
-                        className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
-                      />
-                      <input
-                        value={draft.role}
-                        onChange={(e) => setDraft({ ...draft, role: e.target.value })}
-                        placeholder="Cargo"
-                        className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
-                      />
-                      <input
-                        value={draft.image_url}
-                        onChange={(e) => setDraft({ ...draft, image_url: e.target.value })}
-                        placeholder="URL da foto (opcional)"
-                        className="bg-surface border border-line rounded px-2 py-1.5 text-xs text-cream outline-none focus:border-gold"
-                      />
-                      <div className="mt-auto flex gap-2">
-                        <button onClick={save} className="flex-1 btn-primary !py-1.5 !px-2 !text-[10px]">
-                          Salvar
-                        </button>
-                        <button
-                          onClick={cancel}
-                          className="size-8 inline-flex items-center justify-center border border-line rounded text-cream"
-                        >
-                          <X size={14} />
-                        </button>
-                      </div>
+                    <div className="absolute inset-0 p-3 bg-navy/90 backdrop-blur-sm">
+                      {renderEditForm("edit")}
                     </div>
                   ) : (
                     <>
@@ -230,36 +294,8 @@ export function TeamSection() {
             )}
 
             {isAdmin && adding && (
-              <div className="aspect-[3/4] rounded-xl border border-gold p-3 flex flex-col gap-2 bg-navy/90">
-                <input
-                  value={draft.name}
-                  onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                  placeholder="Nome"
-                  className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
-                />
-                <input
-                  value={draft.role}
-                  onChange={(e) => setDraft({ ...draft, role: e.target.value })}
-                  placeholder="Cargo"
-                  className="bg-surface border border-line rounded px-2 py-1.5 text-sm text-cream outline-none focus:border-gold"
-                />
-                <input
-                  value={draft.image_url}
-                  onChange={(e) => setDraft({ ...draft, image_url: e.target.value })}
-                  placeholder="URL da foto (opcional)"
-                  className="bg-surface border border-line rounded px-2 py-1.5 text-xs text-cream outline-none focus:border-gold"
-                />
-                <div className="mt-auto flex gap-2">
-                  <button onClick={save} className="flex-1 btn-primary !py-1.5 !px-2 !text-[10px]">
-                    Adicionar
-                  </button>
-                  <button
-                    onClick={cancel}
-                    className="size-8 inline-flex items-center justify-center border border-line rounded text-cream"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
+              <div className="aspect-[3/4] rounded-xl border border-gold p-3 bg-navy/90">
+                {renderEditForm("add")}
               </div>
             )}
           </FadeUpStagger>

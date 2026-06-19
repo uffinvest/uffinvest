@@ -42,9 +42,11 @@ export type Database = {
         Row: {
           author_id: string
           author_name: string
+          authors: string | null
           content: string | null
           created_at: string
           id: string
+          pdf_url: string | null
           sector: string
           summary: string | null
           title: string
@@ -52,9 +54,11 @@ export type Database = {
         Insert: {
           author_id: string
           author_name: string
+          authors?: string | null
           content?: string | null
           created_at?: string
           id?: string
+          pdf_url?: string | null
           sector: string
           summary?: string | null
           title: string
@@ -62,9 +66,11 @@ export type Database = {
         Update: {
           author_id?: string
           author_name?: string
+          authors?: string | null
           content?: string | null
           created_at?: string
           id?: string
+          pdf_url?: string | null
           sector?: string
           summary?: string | null
           title?: string

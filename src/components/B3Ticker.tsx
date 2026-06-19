@@ -184,24 +184,6 @@ export function B3Ticker() {
         }
       `}</style>
     </div>
-    <div
-      style={{
-        position: "absolute",
-        top: "calc(62% + 56px)",
-        left: 0,
-        right: 0,
-        textAlign: "center",
-        color: "var(--color-gold, #C9A24A)",
-        fontSize: 11,
-        letterSpacing: "0.32em",
-        textTransform: "uppercase",
-        fontWeight: 600,
-        zIndex: 10,
-        pointerEvents: "none",
-      }}
-    >
-      Liga de Mercado Financeiro
-    </div>
     </>
   );
 }

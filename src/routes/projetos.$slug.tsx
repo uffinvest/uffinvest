@@ -1,17 +1,6 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  FileText,
-  LineChart,
-  Building2,
-  Plus,
-  Trash2,
-  Pencil,
-  X,
-  Upload,
-  FileDown,
-} from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Pencil, X, Upload, FileDown } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionLabel } from "@/components/SectionLabel";
 import { FadeUp } from "@/components/FadeUp";
